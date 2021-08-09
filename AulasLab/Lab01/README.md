@@ -21,6 +21,6 @@ $ diff pub.out saida                    // Comparando o pub.out (saida desejavel
                                         Exemplo de erro: 3c3
                                                          < Mutum
                                                          ---
-                                                        > Gaivota
+                                                         > Gaivota
                                         Isso significa que devemos modificar a linha 3 no primeiro arquivo pela linha 3 no segundo para que se tornem idênticos. Ou seja, alterar Mutum para Gaivota.
 ```
