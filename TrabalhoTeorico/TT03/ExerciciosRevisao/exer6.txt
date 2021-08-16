@@ -1,0 +1,6 @@
+O código tranforma todos os caracteres da string em letra maiuscula
+para que a comparacao fique mais facil, assim descartando as opcoes minusculas
+
+Outras opções: isLetra -> Confirma se o caracter é uma letra
+               isConsoante -> Confirma se é consoante se for uma letra
+                              uma funcao esta ajudando a outra.

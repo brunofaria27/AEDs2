@@ -1,0 +1,6 @@
+int [ ] vet  -> criamos um ponteiro chamado vet;
+new int [5]; -> alocamos 5 espaços de memoria para armazenar numeros inteiros;
+int [ ] vet = new int [5];  -> apontamos nosso ponteiro para area de memoria alocada;
+
+
+Em suma, vet armazena a posição da memoria da primeira posiçao do array;

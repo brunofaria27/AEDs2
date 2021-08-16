@@ -1,0 +1,4 @@
+Quando acontece o melhor e o pior caso do algoritmo de pesquisa binária?
+
+Sua Resposta:
+O melhor caso acontece quando o elemento procurado se encontra exatamente na metade do array. A complexidade dele éΘ(1). Já o pior caso acontece quando o elemento pesquisado não se encontra no array ou está na última posição. A complexidade pode ser escrita como Θ(logn)

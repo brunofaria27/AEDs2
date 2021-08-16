@@ -1,0 +1,3 @@
+A vantagem é que voce pode fazer o uso de somente uma função da classe,
+sem necessariamente precisar de ter conhecimento da classe toda, fazendo com 
+que o codigo fique menor e mais simples de entender. 

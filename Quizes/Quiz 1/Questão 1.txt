@@ -1,0 +1,6 @@
+Supondo que temos uma informação extra sobre o array: que ele está ordenado. Conseguimos fazer algo mais eficiente? Como?
+
+Sua Resposta:
+Sim, podemos dividir o array no meio. Suponhamos que o array tenha tamanho 20, com isso a metade do array seria tamanho 10 e os itens ordenados nesse array são respectivamente 1 a 20. Um indivíduo tem o interesse de pesquisar o número 5, assim faz com que o algoritmo tenha em mente que o item do meio do vetor, posição 10 tem o valor (10), irá olhar o número pesquisado pelo indivíduo e comparar se é maior ou menor que a metade, caso seja menor (como é o caso) irá buscar o elemento na primeira metade, caso fosse maior iria buscar o elemento na segunda metade, fazendo com que seja mais eficiente a busca.
+
+Em melhores palavras: Fazendo uma pesquisa a partir da metade, conhecida como pesquisa binária, na qual temos um limite a direita e um limite a esquerda, e sempre vamos pegar o meio e diminuir os limites para um lado. Caso o elemento pesquisado seja maior que a metade do array, eliminamos a primeira metade do array, caso contrário eliminamos a segunda metade. Para assim encontrar o elemento desejado.

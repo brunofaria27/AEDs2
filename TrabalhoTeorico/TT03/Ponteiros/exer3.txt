@@ -1,0 +1,8 @@
+QUADRO DE MEMORIA                       TELA
+    a ->    X   75h                     x: 5 
+                76h                     a: 5
+                77h                     a: 10              
+                78h                     x: 5                      
+                79h                                       
+                7Ah                           
+

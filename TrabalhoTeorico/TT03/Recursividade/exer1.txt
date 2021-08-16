@@ -1,0 +1,26 @@
+int fat (int n){
+
+	int resp;
+	if (n == 1){ // --> Condição de Parada
+		resp = 1;
+	} else {
+		resp = n * fat (n - 1); // --> Chamada Recursiva
+	}
+	return resp;
+}
+
+--------------------------------------------------------------------
+
+int fib (int n){
+	
+	int resp;
+	if (n == 0 || n == 1){ //--> Condição de Parada
+		resp = 1;
+	} else {
+		resp = fib (n - 1) + fib(n -2); // --> Chamada Recursiva
+	}
+	return resp;
+
+}
+
+---------------------------------------------------------------------

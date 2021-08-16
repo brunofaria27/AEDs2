@@ -1,0 +1,3 @@
+É importante limitar o numero de chamadas recursivas pois a recursividade
+funciona de forma similar à um while ou for, ou seja, é possivel de uma função
+recursiva de ficar presa em um loop.

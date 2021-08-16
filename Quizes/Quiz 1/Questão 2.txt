@@ -1,0 +1,4 @@
+Quando acontece o melhor e o pior caso do algoritmo de pesquisa sequencial?
+
+Sua Resposta:
+O melhor caso de uma pesquisa sequencial ocorre quando o elemento pesquisado se encontra na primeira posição, já o pior caso de uma pesquisa sequencial ocorre quando o elemento pesquisado se encontra na última posição, fazendo com que tenha que navegar por todo o array para buscar, pode-se também ter um segundo pior caso no qual o elemento pesquisado não se encontra no array. Suponha que o array tenha tamanho X, ou seja, a complexidade do pior caso seria Θ(x) e o melhor caso seria Θ(1).

@@ -1,0 +1,14 @@
+QUADRO DE MEMORIA                                 TELA
+c1 -> null                                        ADDRs:
+c2 -> null                                        C1(null)
+c3 -> null                                        C2(null)
+                                                  C3(null)      
+c1 -> [1][aa] <- c2                                ADDRs:  
+c3 -> [2][bb]                                     C1(7Ah) 
+                                                  C2(7Ah)      
+                                                  C3(A5h)
+c1 -> [3][aa] <- c2                               ATRIBUTOs :
+                                                   C1(3/aa)
+                                                   C2(3/aa)
+                                                   C3(2/bb)
+            

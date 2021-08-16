@@ -1,0 +1,2 @@
+O código acima retorna true se a "char c" é vogal, pegando o valor decimal de 'c' e comparando
+com os valores decimais de A,E,I,O,U, e a,e,i,o,u.

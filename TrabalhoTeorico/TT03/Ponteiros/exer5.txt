@@ -1,0 +1,3 @@
+Cliente c -> criamos um ponteiro chamado c
+=new Cliente() -> criamos um objeto do tipo Cliente;
+Cliente c = new Cliente -> apontamos o ponteiro para o objeto;

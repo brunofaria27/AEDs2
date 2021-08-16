@@ -1,0 +1,5 @@
+A vantagem de ter metodos publicos e privados é de
+manejar as informações do codigo com mais segurança e 
+organização, definindo informações mais sensiveis como 
+privadas e definindo metodos publicos para agir como ponte
+entre o usuário e a informação.  

@@ -1,0 +1,5 @@
+Ao inves de c2 = c1, o programador poderia criar um novo objeto para
+c2, com os mesmos parametros. Dessa forma, ele teria 2 objetos iguais
+em endereços de memorias diferentes.
+Outra forma é criar na classe um metodo clone(), que pega c1 e clona para c2
+(c2 = c1.clone();).

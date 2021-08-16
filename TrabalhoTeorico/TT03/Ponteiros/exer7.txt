@@ -1,0 +1,18 @@
+QUADRO DE MEMORIA
+c1->[1|aa] c2->null c3->[2|bb]              
+c1->[1|aa] <-c2 c3->[2|bb]             
+ x-> [1]   
+ x-> [4]
+ x-> [aa]
+ x-> [dd]
+ 
+x -> [5|ee]
+y -> [6|ff]
+
+33h[1|aa]
+51h[2|bb]
+62h[5|ee]
+x -> 33h[4|aa]
+x -> 33h[4|dd]
+y -> 33h[6|ff]
+c3 -> 33h[6|ff]

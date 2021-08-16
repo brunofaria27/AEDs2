@@ -1,0 +1,3 @@
+A sequencia de FIbonacci funciona de forma recursiva, ou seja, o método 
+recursivo faz muito mais sentido e tem uma implementação muito mais 
+fácil que o método iterativo.

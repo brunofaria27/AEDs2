@@ -1,0 +1,1 @@
+O programa é um while infinito que printa de 0 até o maior numero que byte,short,int e long suportam;
