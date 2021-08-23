@@ -8,17 +8,21 @@ public class Q02 {
         int meio = 0;   // Guardar a posicao do meio
 
         while(esq <= dir) { // Continuar fazendo enquanto as posicoes nao se cruzarem
-            meio = (esq + dir) / 2; // Calcular posicao do meio
+            meio = (esq + dir) / 2; // Sempre atualizar o meio
             if(array[meio] <= x) { /* Ver se o elemento que procura é maior que o elemento do meio */
-                esq = meio + 1; /* Se for, o elemento esta na segunda metade */
+                esq = meio + 1; /* Se for, o elemento esta na segunda metade - atualizar a primeira posicao apos atualizar o meio */
             } else {
-                dir = meio - 1; /* Senão está na primeira metade */
+                dir = meio - 1; /* Senão está na primeira metade - atualizar a ultima posicao apos atualizar o meio*/
             }
         }
 
+        // meio = pos
+        // esq == pos
+        // dire == pos
+
         // Ver se a primeira posicao esta no intervalo do array
         if(dir <= n - 1 && dir >= 0) {
-            if(array[dir] == x) {   // Unica comparacao
+            if(array[meio] == x) {   // Unica comparacao
                 resp = true;
                 return resp;
             }
@@ -26,7 +30,7 @@ public class Q02 {
         return resp;
     }
     public static void main(String[] args) {
-        int x = 35; // valor a ser pesquisado
+        int x = 30; // valor a ser pesquisado
         if(pesquisaBinaria(x) == true) {
             System.out.println("tem");
         } else {
