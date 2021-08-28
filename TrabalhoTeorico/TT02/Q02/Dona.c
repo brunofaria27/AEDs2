@@ -11,7 +11,7 @@ bool isZero(int numero) {
 }
 
 int main() {
-    int donaM = -1, filhoVelho = 0, filhoUm = 0, filhoDois = 0;
+    int donaM = -1, filhoVelho = 0, filhoUm = 0, filhoDois = 0, filhoTres = 0;
     while(isZero(donaM) == false) {
         scanf("%d", &donaM);
 
@@ -19,7 +19,15 @@ int main() {
             scanf("%d", &filhoUm);
             scanf("%d", &filhoDois);
 
-            filhoVelho = donaM - (filhoUm + filhoDois);
+            filhoTres = donaM - (filhoUm + filhoDois);
+            
+            filhoVelho = filhoTres;
+            if(filhoVelho < filhoDois) {
+                filhoVelho = filhoDois;
+            } else if(filhoVelho < filhoUm) {
+                filhoVelho = filhoUm;
+            }
+
             printf("%d\n", filhoVelho);
         } else {
             exit(0);

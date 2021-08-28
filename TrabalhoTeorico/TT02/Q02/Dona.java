@@ -4,7 +4,7 @@ class Dona {
     }
 
     public static void main(String[] args) {
-        int donaM = -1, filhoVelho = 0, filhoUm = 0, filhoDois = 0;
+        int donaM = -1, filhoVelho = 0, filhoUm = 0, filhoDois = 0, filhoTres = 0;
         while(isZero(donaM) == false) {
             donaM = MyIO.readInt();
 
@@ -12,7 +12,15 @@ class Dona {
                 filhoUm = MyIO.readInt();
                 filhoDois = MyIO.readInt();
 
-                filhoVelho = donaM - (filhoUm + filhoDois);
+                filhoTres = donaM - (filhoUm + filhoDois);
+
+                filhoVelho = filhoTres;
+                if(filhoVelho < filhoDois) {
+                    filhoVelho = filhoDois;
+                } else if(filhoVelho < filhoUm) {
+                    filhoVelho = filhoUm;
+                }
+
                 MyIO.println(filhoVelho);
             } else {
                 System.exit(0);
