@@ -113,6 +113,11 @@ class Series {
 }
 
 class Q01 {
+    /*
+    * @method le o arquivo HTML e procura infobox para ver o inicio da tabela de informacoes
+    * @param recebe o codigo HTML
+    * @return a posicao inicial da table
+    */
     public static int posInicio(String code) {
         int resp = 0;
 
@@ -126,6 +131,11 @@ class Q01 {
         return resp;
     }
 
+    /*
+    * @method le o arquivo HTML e procura id="toc" para terminar a procura pela table
+    * @param recebe o nome do arquivo e a posicao de inicio
+    * @return a posicao do final do table
+    */
     public static int posFim(String code, int inicio) {
         int resp = 0;
 
@@ -137,6 +147,24 @@ class Q01 {
         }
 
         return resp;
+    }
+
+    /*
+    * @method le o arquivo HTML e conta quantas linhas tem nele
+    * @param recebe o nome do arquivo
+    * @return a quantidade de linhas
+    */
+    public static int qntLinhas(String file) {
+        int linhas = 0;
+        Arq.openRead(file);
+
+        while(Arq.hasNext() == true) {
+            Arq.readLine();
+            linhas++;
+        }
+
+        Arq.close();
+        return linhas;
     }
 
     /*
@@ -160,9 +188,32 @@ class Q01 {
         Arq.close();
     }
 
+    public static void excluirTags(String file, int tamanho) {
+        String[] linhas = new String[500];  // Armazena cada linha do arquivo
+        Arq.openRead(file);
+
+        for(int i = 0; i < tamanho; i++) {
+            linhas[i] = Arq.readLine(); 
+        }
+
+        Arq.close();
+    }
+
+    /*
+    * @method recebe todas as funcoes que irá tratar o codigo HTML para deixar o desejado
+    * @param recebe o nome do arquivo
+    * @return void
+    */
+    public static void tratarHTML(String file) {
+        pegarTable(file);
+        int tamanho = qntLinhas(file);
+        excluirTags(file, tamanho);
+    }
+
     public static boolean isFim(String s) {
         return (s.length() == 3 && s.charAt(0) == 'F' && s.charAt(1) == 'I' && s.charAt(2) == 'M');
     }
+
     public static void main(String[] args) {
         String[] entrada = new String[1000];
         int numEntrada = 0;
@@ -175,7 +226,7 @@ class Q01 {
 
         //Para cada linha de entrada, gerando uma de saida ciptografada
         for(int i = 0; i < numEntrada; i++){
-            pegarTable(entrada[i]);
+            tratarHTML(entrada[i]);
         }
     }
 }
