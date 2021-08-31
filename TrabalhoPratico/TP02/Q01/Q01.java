@@ -179,9 +179,3 @@ class Q01 {
         }
     }
 }
-
-/*
-* Teste para ver o funcionamento do toString
-* Series serie = new Series("Anne", "Série", "44 minutos", "Canadá", "Inglês", "CBC Television", "19 de março de 2017 – atualmente", 1, 7);
-* System.out.println(serie);
-*/
