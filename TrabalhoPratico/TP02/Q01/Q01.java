@@ -188,14 +188,40 @@ class Q01 {
         Arq.close();
     }
 
-    public static void excluirTags(String file, int tamanho) {
+    /*
+    * @method tira todas as tags do HTML deixando apenas os textos
+    * @param nome do arquivo e quantidade de linhas
+    * @return void
+    */
+    public static void excluirTags(String file, int qntLinhas) {
         String[] linhas = new String[500];  // Armazena cada linha do arquivo
+        String resp = "";
         Arq.openRead(file);
 
-        for(int i = 0; i < tamanho; i++) {
+        for(int i = 0; i < qntLinhas; i++) {
             linhas[i] = Arq.readLine(); 
         }
 
+        boolean flag = false;
+        for(int i = 0; i < qntLinhas; i++) {
+            for(int j = 0; j < linhas[i].length() - 1; j++) {
+                if(linhas[i].charAt(j) == '>' && linhas[i].charAt(j + 1) != '<') {
+                    flag = true;
+                } else if(linhas[i].charAt(j) == '<') {
+                    flag = false;
+                }
+
+                if(flag) {
+                    if(linhas[i].charAt(j + 1) != '<') {
+                        resp = resp + linhas[i].charAt(j + 1);
+                    }
+                }
+            }
+            resp = resp + "\n";
+        }
+
+        Arq.openWrite(file);
+        Arq.print(resp);
         Arq.close();
     }
 
@@ -206,8 +232,8 @@ class Q01 {
     */
     public static void tratarHTML(String file) {
         pegarTable(file);
-        int tamanho = qntLinhas(file);
-        excluirTags(file, tamanho);
+        int qntLinhas = qntLinhas(file);
+        excluirTags(file, qntLinhas);
     }
 
     public static boolean isFim(String s) {
