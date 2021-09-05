@@ -256,3 +256,8 @@ class Q01 {
         }
     }
 }
+
+/* TAREFAS A REALIZAR */
+/* EXCLUIR -> &nbsp; e &#160; */
+/* PEGAR DADOS DO HTML */
+/* APÓS PEGAR, CRIAR UM OBJETO SERIE E PRINTAR COM TO STRING */
