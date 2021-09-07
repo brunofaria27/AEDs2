@@ -194,7 +194,7 @@ class Q01 {
     * @return void
     */
     public static void excluirTags(String file, int qntLinhas) {
-        String[] linhas = new String[500];  // Armazena cada linha do arquivo
+        String[] linhas = new String[qntLinhas];  // Armazena cada linha do arquivo
         String resp = "";
         Arq.openRead(file);
 
@@ -226,6 +226,46 @@ class Q01 {
     }
 
     /*
+    * @method excluir &nbsp; e &#160;
+    * @param recebe o nome do arquivo
+    * @return void
+    */
+    public static void excluirItens(String file, int qntLinhas) {
+        String[] linhas = new String[qntLinhas];  // Armazena cada linha do arquivo
+        String resp = "";
+        Arq.openRead(file);
+
+        for(int i = 0; i < qntLinhas; i++) {
+            linhas[i] = Arq.readLine(); 
+        }
+
+        boolean flag = false;
+        for(int i = 0; i < qntLinhas; i++) {
+            for(int j = 0; j < linhas[i].length() - 1; j++) {
+                if(linhas[i].charAt(j) == '&') {
+                    while(linhas[i].charAt(j) != ';') {
+                        flag = false;
+                        j++;
+                    }
+                } else {
+                    flag = true;
+                }
+
+                if(flag) {
+                    if(linhas[i].charAt(j) != ';') {
+                        resp = resp + linhas[i].charAt(j);
+                    }
+                }
+            }
+            resp = resp + "\n";
+        }
+
+        Arq.openWrite(file);
+        Arq.print(resp);
+        Arq.close();
+    }
+
+    /*
     * @method recebe todas as funcoes que irá tratar o codigo HTML para deixar o desejado
     * @param recebe o nome do arquivo
     * @return void
@@ -234,6 +274,7 @@ class Q01 {
         pegarTable(file);
         int qntLinhas = qntLinhas(file);
         excluirTags(file, qntLinhas);
+        excluirItens(file, qntLinhas);
     }
 
     public static boolean isFim(String s) {
@@ -258,6 +299,6 @@ class Q01 {
 }
 
 /* TAREFAS A REALIZAR */
-/* EXCLUIR -> &nbsp; e &#160; */
+/* EXCLUIR -> &nbsp; e &#160; -> CORRIGIR METODO QUE FAZ ISSO MONITORIA */
 /* PEGAR DADOS DO HTML */
 /* APÓS PEGAR, CRIAR UM OBJETO SERIE E PRINTAR COM TO STRING */
