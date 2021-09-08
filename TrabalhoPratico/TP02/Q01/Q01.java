@@ -241,7 +241,7 @@ class Q01 {
 
         boolean flag = false;
         for(int i = 0; i < qntLinhas; i++) {
-            for(int j = 0; j < linhas[i].length() - 1; j++) {
+            for(int j = 0; j < linhas[i].length(); j++) {
                 if(linhas[i].charAt(j) == '&') {
                     while(linhas[i].charAt(j) != ';') {
                         flag = false;
@@ -266,6 +266,31 @@ class Q01 {
     }
 
     /*
+    * @method pegar dados do HTML e criar um objeto
+    * @param recebe o nome do arquivo e a quantidade de linhas
+    * @return void
+    */
+    public static void pegarDados(String file, int qntLinhas) {
+        String[] linhas = new String[qntLinhas];  // Armazena cada linha do arquivo
+        Arq.openRead(file, "UTF-8");
+        Series serie = new Series();
+
+        for(int i = 0; i < qntLinhas; i++) {
+            linhas[i] = Arq.readLine(); 
+        }
+
+        for(int i = 0; i < qntLinhas; i++) {
+            if(linhas[i].equals("Duração")) {
+                serie.setDuracao(linhas[i + 1]);
+            }
+        }
+
+        System.out.println(serie.getDuracao());
+
+        Arq.close();
+    }
+
+    /*
     * @method recebe todas as funcoes que irá tratar o codigo HTML para deixar o desejado
     * @param recebe o nome do arquivo
     * @return void
@@ -275,6 +300,7 @@ class Q01 {
         int qntLinhas = qntLinhas(file);
         excluirTags(file, qntLinhas);
         excluirItens(file, qntLinhas);
+        pegarDados(file, qntLinhas);
     }
 
     public static boolean isFim(String s) {
