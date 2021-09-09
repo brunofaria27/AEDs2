@@ -114,42 +114,6 @@ class Series {
 
 class Q01 {
     /*
-    * @method le o arquivo HTML e procura infobox para ver o inicio da tabela de informacoes
-    * @param recebe o codigo HTML
-    * @return a posicao inicial da table
-    */
-    public static int posInicio(String code) {
-        int resp = 0;
-
-        for(int i = 0; i < code.length(); i++) {
-            if(code.charAt(i) == 'i' && code.charAt(i + 1) == 'n' && code.charAt(i + 2) == 'f' && code.charAt(i + 3) == 'o' &&
-                code.charAt(i + 4) == 'b' && code.charAt(i + 5) == 'o' && code.charAt(i + 6) == 'x' ) {
-                resp = i;
-            }
-        }
-
-        return resp;
-    }
-
-    /*
-    * @method le o arquivo HTML e procura id="toc" para terminar a procura pela table
-    * @param recebe o nome do arquivo e a posicao de inicio
-    * @return a posicao do final do table
-    */
-    public static int posFim(String code, int inicio) {
-        int resp = 0;
-
-        for(int i = inicio; i < code.length(); i++) {
-            if((int)code.charAt(i) == 105 && (int)code.charAt(i + 1) == 100 && (int)code.charAt(i + 2) == 61 && (int)code.charAt(i + 3) == 34 &&
-                 (int)code.charAt(i + 4) == 116 && (int)code.charAt(i + 5) == 111 && (int)code.charAt(i + 6) == 99 && (int)code.charAt(i + 7) == 34) {
-                    resp = i;
-            }
-        }
-
-        return resp;
-    }
-
-    /*
     * @method le o arquivo HTML e conta quantas linhas tem nele
     * @param recebe o nome do arquivo
     * @return a quantidade de linhas
@@ -176,8 +140,8 @@ class Q01 {
         String code = Arq.openReadClose(file);
         String resp = "";
 
-        int comeco = posInicio(code);
-        int fim = posFim(code, comeco);
+        int comeco = code.indexOf("</head>");
+        int fim = code.indexOf("toctitle", comeco);
 
         for(int i = comeco; i < fim; i++) {
             resp = resp + code.charAt(i);
@@ -279,13 +243,38 @@ class Q01 {
             linhas[i] = Arq.readLine(); 
         }
 
+        serie.setNome(linhas[2]);
         for(int i = 0; i < qntLinhas; i++) {
-            if(linhas[i].equals("Duração")) {
+            if(linhas[i].equals("Formato")) {
+                serie.setFormato(linhas[i + 1]);
+            } else if(linhas[i].equals("Duração")) {
                 serie.setDuracao(linhas[i + 1]);
+            } else if(linhas[i].equals("País de origem")) {
+                serie.setPaisOrigem(linhas[i + 1]);
+            } else if(linhas[i].equals("Idioma original")) {
+                serie.setIdioma(linhas[i + 1]);
+            } else if(linhas[i].equals("Emissora de televisão original")) {
+                String resp = "";
+                for(int j = 0; j < linhas[i + 1].length() - 1; j++) {
+                    if(linhas[i + 1].charAt(0) != ' ') {
+                        resp = linhas[i + 1];
+                    } else {
+                        resp = resp + linhas[i + 1].charAt(j + 1);
+                    }
+                }
+                serie.setEmissoraOriginal(resp);
+            } else if(linhas[i].equals("Transmissão original")) {
+                serie.setTransmissaoOriginal(linhas[i + 1]);
+            } else if(linhas[i].equals("N.º de temporadas")) {
+                int resp = 0;
+                serie.setNumeroTemporadas(resp);
+            } else if(linhas[i].equals("N.º de episódios")) {
+                int resp = 0;
+                serie.setNumeroTemporadas(resp);
             }
         }
 
-        System.out.println(serie.getDuracao());
+        System.out.println(serie.toString());
 
         Arq.close();
     }
