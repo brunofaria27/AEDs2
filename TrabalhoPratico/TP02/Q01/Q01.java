@@ -243,16 +243,41 @@ class Q01 {
             linhas[i] = Arq.readLine(); 
         }
 
-        serie.setNome(linhas[2]);
+        int posPonto = 0;
+        for(int i = 0; i < file.length(); i++) {
+            if(file.charAt(i) == '.') {
+                posPonto = i;
+            }
+        }
+        String nome = file.substring(12, posPonto);
+        nome = nome.replace('_', ' ');
+        serie.setNome(nome);
+
         for(int i = 0; i < qntLinhas; i++) {
             if(linhas[i].equals("Formato")) {
                 serie.setFormato(linhas[i + 1]);
             } else if(linhas[i].equals("Duração")) {
                 serie.setDuracao(linhas[i + 1]);
             } else if(linhas[i].equals("País de origem")) {
-                serie.setPaisOrigem(linhas[i + 1]);
+                String resp = "";
+                for(int j = 0; j < linhas[i + 1].length() - 1; j++) {
+                    if(linhas[i + 1].charAt(0) != ' ') {
+                        resp = linhas[i + 1];
+                    } else {
+                        resp = resp + linhas[i + 1].charAt(j + 1);
+                    }
+                }
+                serie.setPaisOrigem(resp);
             } else if(linhas[i].equals("Idioma original")) {
-                serie.setIdioma(linhas[i + 1]);
+                String resp = "";
+                for(int j = 0; j < linhas[i + 1].length() - 1; j++) {
+                    if(linhas[i + 1].charAt(0) != ' ') {
+                        resp = linhas[i + 1];
+                    } else {
+                        resp = resp + linhas[i + 1].charAt(j + 1);
+                    }
+                }
+                serie.setIdioma(resp);
             } else if(linhas[i].equals("Emissora de televisão original")) {
                 String resp = "";
                 for(int j = 0; j < linhas[i + 1].length() - 1; j++) {
@@ -264,13 +289,39 @@ class Q01 {
                 }
                 serie.setEmissoraOriginal(resp);
             } else if(linhas[i].equals("Transmissão original")) {
-                serie.setTransmissaoOriginal(linhas[i + 1]);
+                String resp = "";
+                for(int j = 0; j < linhas[i + 1].length() - 1; j++) {
+                    if(linhas[i + 1].charAt(0) != ' ') {
+                        resp = linhas[i + 1];
+                    } else {
+                        resp = resp + linhas[i + 1].charAt(j + 1);
+                    }
+                }
+                serie.setTransmissaoOriginal(resp);
             } else if(linhas[i].equals("N.º de temporadas")) {
-                int resp = 0;
-                serie.setNumeroTemporadas(resp);
+                String resp = "";
+                for(int j = 0; j < linhas[i + 1].length(); j++) {
+                    if(linhas[i + 1].charAt(j) == '0' || linhas[i + 1].charAt(j) == '1' || linhas[i + 1].charAt(j) == '2' || linhas[i + 1].charAt(j) == '3' || linhas[i + 1].charAt(j) == '4' ||
+                    linhas[i + 1].charAt(j) == '5' || linhas[i + 1].charAt(j) == '6' || linhas[i + 1].charAt(j) == '7' || linhas[i + 1].charAt(j) == '8' || linhas[i + 1].charAt(j) == '9') {
+                        resp = resp + linhas[i + 1].charAt(j);
+                    } else if(linhas[i + 1].charAt(j) == '(' || linhas[i + 1].charAt(j) == '-' || linhas[i + 1].charAt(j) == '+' || linhas[i + 1].charAt(j) == ' ') {
+                        break;
+                    }
+                }
+                int num = Integer.parseInt(resp);
+                serie.setNumeroTemporadas(num);
             } else if(linhas[i].equals("N.º de episódios")) {
-                int resp = 0;
-                serie.setNumeroTemporadas(resp);
+                String resp = "";
+                for(int j = 0; j < linhas[i + 1].length(); j++) {
+                    if(linhas[i + 1].charAt(j) == '0' || linhas[i + 1].charAt(j) == '1' || linhas[i + 1].charAt(j) == '2' || linhas[i + 1].charAt(j) == '3' || linhas[i + 1].charAt(j) == '4' ||
+                    linhas[i + 1].charAt(j) == '5' || linhas[i + 1].charAt(j) == '6' || linhas[i + 1].charAt(j) == '7' || linhas[i + 1].charAt(j) == '8' || linhas[i + 1].charAt(j) == '9') {
+                        resp = resp + linhas[i + 1].charAt(j);
+                    } else if(linhas[i + 1].charAt(j) == '(' || linhas[i + 1].charAt(j) == '-' || linhas[i + 1].charAt(j) == '+' || linhas[i + 1].charAt(j) == ' ') {
+                        break;
+                    }
+                }
+                int num = Integer.parseInt(resp);
+                serie.setNumeroEpisodios(num);
             }
         }
 
@@ -285,11 +336,13 @@ class Q01 {
     * @return void
     */
     public static void tratarHTML(String file) {
-        pegarTable(file);
-        int qntLinhas = qntLinhas(file);
-        excluirTags(file, qntLinhas);
-        excluirItens(file, qntLinhas);
-        pegarDados(file, qntLinhas);
+        String arquivo = "/tmp/series/";
+        arquivo += file; 
+        pegarTable(arquivo);
+        int qntLinhas = qntLinhas(arquivo);
+        excluirTags(arquivo, qntLinhas);
+        excluirItens(arquivo, qntLinhas);
+        pegarDados(arquivo, qntLinhas);
     }
 
     public static boolean isFim(String s) {
@@ -312,8 +365,3 @@ class Q01 {
         }
     }
 }
-
-/* TAREFAS A REALIZAR */
-/* EXCLUIR -> &nbsp; e &#160; -> CORRIGIR METODO QUE FAZ ISSO MONITORIA */
-/* PEGAR DADOS DO HTML */
-/* APÓS PEGAR, CRIAR UM OBJETO SERIE E PRINTAR COM TO STRING */
