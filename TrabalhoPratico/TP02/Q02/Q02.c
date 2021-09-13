@@ -1,7 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct Serie {
     char nome[50];
@@ -35,90 +34,58 @@ char* removeTags(char* old) {
     return newLine;
 }
 
-/*
-void guardarDados(struct Serie series) {
-    FILE *fp = fopen("/tmp/series/Friends.html", "r");
-    char buf[2000];
-    fgets(buf, 2000, fp);
-
-    while(strstr(buf, "infobox_v2") == NULL) {
-        fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    fgets(buf, 2000, fp);
-    strcpy(series.nome, removeTags(buf));
-
-    while(strstr(buf, "Formato") == NULL) {
-        fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    strcpy(series.formato, removeTags(buf));
-
-    while(strstr(buf, "Duração") == NULL) {
-        fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    strcpy(series.duracao, removeTags(buf));
-
-    while(strstr(buf, "Idioma original") == NULL) {
-        fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    strcpy(series.idioma, removeTags(buf));
-
-    while(strstr(buf, "Emissora de televisão original") == NULL) {
-        fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    strcpy(series.emissoraOriginal, removeTags(buf));
-
-    while(strstr(buf, "Transmissão original") == NULL) {
-        fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    strcpy(series.transmissaoOriginal, removeTags(buf));
-
-    printf("%s %s %s %s %s %s", series.nome, series.formato, series.duracao, series.idioma, series.emissoraOriginal, series.transmissaoOriginal);
-}
-
-void imprimir() {
-    struct Serie series;
-    guardarDados(series);
-}
-*/
-
 int main() {
-    FILE *fp = fopen("/tmp/series/Friends.html", "r");
-    char buf[2000];
     struct Serie series;
-    fgets(buf, 2000, fp);
+    
+    char entrada[50];
+    char diretorio[50] = "/tmp/series/";
+    char arquivo[50];
 
-    while(strstr(buf, "infobox_v2") == NULL) {
+    // Pegar nome do arquivo e concatenar para achar o diretorio
+    fgets(entrada, 50, stdin);
+    strcat(strcpy(arquivo, diretorio), entrada);
+
+    FILE *fp;
+    if((fp = fopen(arquivo, "r")) == NULL) {
+        printf("Falha na abertura\n");
+    } else {
+        char buf[2000];
         fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    fgets(buf, 2000, fp);
-    strcpy(series.nome, removeTags(buf));
 
-    while(strstr(buf, "Formato") == NULL) {
+        while(strstr(buf, "infobox_v2") == NULL) {
+            fgets(buf, 2000, fp);
+        }
         fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    strcpy(series.formato, removeTags(buf));
-
-    while(strstr(buf, "Duração") == NULL) {
         fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    strcpy(series.duracao, removeTags(buf));
+        strcpy(series.nome, removeTags(buf));
 
-    while(strstr(buf, "Idioma original") == NULL) {
+        while(strstr(buf, "Formato") == NULL) {
+            fgets(buf, 2000, fp);
+        }
         fgets(buf, 2000, fp);
-    }
-    fgets(buf, 2000, fp);
-    strcpy(series.idioma, removeTags(buf));
+        strcpy(series.formato, removeTags(buf));
 
-    printf("%s %s %s %s", series.nome, series.formato, series.duracao, series.idioma);
+        while(strstr(buf, "Duração") == NULL) {
+            fgets(buf, 2000, fp);
+        }
+        fgets(buf, 2000, fp);
+        strcpy(series.duracao, removeTags(buf));
+
+        while(strstr(buf, "País de origem") == NULL) {
+            fgets(buf, 2000, fp);
+        }
+        fgets(buf, 2000, fp);
+        strcpy(series.paisOrigem, removeTags(buf));
+
+        while(strstr(buf, "Idioma original") == NULL) {
+            fgets(buf, 2000, fp);
+        }
+        fgets(buf, 2000, fp);
+        strcpy(series.idioma, removeTags(buf));
+
+        printf("%s %s %s %s %s", series.nome, series.formato, series.duracao, series.paisOrigem, series.idioma);
+    }
+    
 
     return 0;
 }
