@@ -30,7 +30,7 @@ char *readline(char *line, int max_size) {
     return freadline(line, max_size, stdin);
 }
 
-void imprimir(Serie *serie) {
+void print_serie(Serie *serie) {
     printf("%s %s %s %s %s %s %s %d %d\n",
         serie->nome,
         serie->formato,
@@ -70,6 +70,7 @@ char *ler_html(char filename[]) {
     return html;
 }
 
+
 char *extrair_texto(char *html, char *texto) {
     char *start = texto;
     int contagem = 0;
@@ -96,6 +97,7 @@ char *extrair_texto(char *html, char *texto) {
 
     return *start == ' ' ? start + 1 : start;
 }
+
 
 void ler_serie(Serie *serie, char *html) {
     char texto[MAX_FIELD_SIZE];
@@ -143,171 +145,12 @@ void ler_serie(Serie *serie, char *html) {
     sscanf(extrair_texto(ptr, texto), "%d", &serie->num_episodios);
 }
 
-Serie clonar(Serie *serie) {
-    return *serie;
-}
-
 #define MAX_LINE_SIZE 250
 #define PREFIXO "/tmp/series/"
 // #define PREFIXO "../entrada e saida/tp02/series/"
 
 int isFim(char line[]) {
     return line[0] == 'F' && line[1] == 'I' && line[2] == 'M';
-}
-
-/* PARTE LISTA */
-Serie array[100];
-int n = 0;
-
-void inserirInicio(Serie serie) {
-    int i;
-
-    if(n >= 100) {
-        printf("Erro ao inserir!\n");
-        exit(1);
-    }
-
-    for(i = n; i > 0; i--) {
-        array[i] = array[i - 1];
-    }
-
-    array[0] = serie;
-    n++;
-}
-
-void inserir(int pos, Serie serie) {
-    if(n >= 100 || pos < 0 || pos > n) {
-        printf("Erro ao inserir!\n");
-        exit(1);
-    }
-    
-    for(int i = n; i > pos; i--) {
-        array[i] = array[i - 1];
-    }
-    
-    array[pos] = serie;
-    n++;
-}
-
-void inserirFim(Serie serie) {
-    if(n >= 100) {
-        printf("Erro ao inserir!\n");
-        exit(1);
-    }
-
-    array[n] = clonar(&serie);
-    n++;
-}
-
-Serie removerInicio() {
-    Serie resp;
-
-    if(n == 0) {
-        printf("Erro ao remover!\n");
-        exit(1);
-    }
-    
-    resp = array[0];
-    n--;
-
-    for(int i = 0; i < n; i++) {
-        array[i] = array[i + 1];
-    }
-
-    return resp;
-}
-
-Serie remover(int pos) {
-    if(n == 0 || pos < 0 || pos >= n) {
-        printf("Erro ao remover!\n");
-        exit(1);
-    }
-    
-    Serie resp = array[pos];
-    n--;
-
-    for(int i = pos; i < n; i++) {
-        array[i] = array[i + 1];
-    }
-
-    return resp;
-}
-
-Serie removerFim() {
-    if(n == 0) {
-        printf("\nErro ao remover!");
-        exit(1);
-    }
-
-    return array[--n];
-}
-
-void mostrar() {
-    for(int i = 0; i < n; i++) {
-        printf("%s %s %s %s %s %s %s %i %i\n", array[i].nome,
-                                               array[i].formato,
-                                               array[i].duracao,
-                                               array[i].pais,
-                                               array[i].idioma,
-                                               array[i].emissora,
-                                               array[i].transmissao,
-                                               array[i].num_temporadas,
-                                               array[i].num_episodios);
-    }
-}
-
-/* END PARTE LISTA */
-
-Serie removidos[20]; // jogadores removidos
-int r = 0; // contador removidos
-
-Serie lerDados(char s[]){
-    Serie series;
-
-    char *html = ler_html(s);
-    ler_serie(&series, html);
-
-    return series;
-}
-
-void printaRemovidos() {
-    for(int i = 0; i < r; i++){
-        printf("(R) %s\n", removidos[i].nome);
-    }
-}
-
-void trataEntradas(char *s) {
-    char *aux[3];
-    char nomeArq[100] = {"/tmp/series/"};
-
-    if(s[0] == 'I' && s[1] == 'I') {
-        aux[0] = strtok(s, " "); 
-        aux[1] = strtok(NULL, " ");
-        strcat(nomeArq, aux[1]);
-        inserirInicio(lerDados(nomeArq));
-    } else if(s[0] == 'I' && s[1] == 'F') {
-       aux[0] = strtok(s," "); 
-       aux[1] = strtok(NULL," "); 
-       strcat(nomeArq, aux[1]);
-       inserirFim(lerDados(nomeArq));
-    } else if(s[0] == 'I' && s[1] == '*') {
-        aux[0] = strtok(s," "); 
-        aux[1] = strtok(NULL," ");
-        aux[2] = strtok(NULL," ");
-        strcat(nomeArq, aux[2]);
-        inserir(atoi(aux[1]), lerDados(nomeArq));
-    } else if(s[0] == 'R' && s[1] == '*') {
-        aux[0] = strtok(s," "); 
-        aux[1] = strtok(NULL," ");
-        removidos[r] = remover(atoi(aux[1]));
-        r++;
-    } else if(s[0] == 'R' && s[1] == 'I') {
-        removidos[r] =  removerInicio();
-        r++;
-    } else if(s[0] == 'R' && s[1] == 'F') {
-        removidos[r] = removerFim();
-        r++;
-    }
 }
 
 int main() {
@@ -317,28 +160,14 @@ int main() {
 
     strcpy(line, PREFIXO);
     readline(line + tam_prefixo, MAX_LINE_SIZE);
-    int numEntrada = 0;
 
     while (!isFim(line + tam_prefixo)) {
         char *html = ler_html(line);
         ler_serie(&serie, html);
-        inserirFim(serie);
         free(html);
+        print_serie(&serie);
         readline(line + tam_prefixo, MAX_LINE_SIZE);
-        numEntrada++;
     }
-
-    int n;
-    scanf("%i",&n);
-    char comandos[n][MAX_LINE_SIZE];
-
-    for(int i=0; i<n; i++){
-        scanf(" %[^\n]s", comandos[i]); 
-        trataEntradas(comandos[i]);
-    }
-
-    printaRemovidos();
-    mostrar();
 
     return EXIT_SUCCESS;
 }
