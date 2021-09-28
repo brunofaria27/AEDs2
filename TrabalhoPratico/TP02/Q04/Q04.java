@@ -206,7 +206,6 @@ class Serie {
         this.numeroEpisodios = num;
 
         br.close();
-//        System.out.println(this.toString());
     }
 
     public String toString() {
@@ -237,8 +236,40 @@ class Q04 {
 
     public static boolean pesquisaBinaria(String seriesPesquisa, int numSeries, Serie[] series) {
         boolean resp = false;
-        
+
+        int esquerda = 0;
+        int direita = series.length - 1;
+        int meio;
+
+        while(esquerda <= direita) {
+            comparacoes++;
+            meio = (esquerda + direita) / 2;
+            if(seriesPesquisa.equals(series[meio].getNome())) {
+                comparacoes++;
+                resp = true;
+                esquerda = series.length;
+            } else if(seriesPesquisa.compareTo(series[meio].getNome()) > 0) {
+                comparacoes++;
+                esquerda = meio + 1;
+            } else {
+                direita = meio - 1;
+            }
+        }
+        comparacoes++;
+
         return resp;
+    }
+
+    public static void ordena(Serie[] series) {
+        for(int i = 0; i < series.length - 1; i++) {
+            for(int j = i + 1;  j < series.length; j++) {
+                if(series[i].getNome().compareTo(series[j].getNome()) > 0) {
+                    Serie temp = series[i];
+                    series[i] = series[j];
+                    series[j] = temp;
+                }
+            }
+        }
     }
 
     public static long now(){
@@ -263,6 +294,7 @@ class Q04 {
         numEntrada--; // Desconsiderar a palavra FIM
 
         Serie[] series = lerDados(entrada, numEntrada);
+        ordena(series);
 
         // Ler a entrada de nomes a serem pesquisados
         do {
