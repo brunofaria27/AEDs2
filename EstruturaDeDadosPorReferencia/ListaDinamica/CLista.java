@@ -8,65 +8,65 @@
 
 public class CLista {
 
-	private CCelula primeira; // Referencia a célula cabeça
-	private CCelula ultima; // Referencia a última célula da lista
+	private CCelula primeira; // Referencia a cï¿½lula cabeï¿½a
+	private CCelula ultima; // Referencia a ï¿½ltima cï¿½lula da lista
 	private int qtde; // Contador de itens na lista. Deve ser incrementado sempre que um item for
-						// inserido e decrementado quando um item for excluído.
+						// inserido e decrementado quando um item for excluï¿½do.
 
-	// Função construtora. Aloca a célula cabeça e faz todas as referências
+	// Funï¿½ï¿½o construtora. Aloca a cï¿½lula cabeï¿½a e faz todas as referï¿½ncias
 	// apontarem para ela.
 	public CLista() {
-		primeira = new CCelula();
-		ultima = primeira;
+		primeira = new CCelula();	// cria a celula cabeca com o CCelula primeira referenciando ela
+		ultima = primeira;	// a ultima referencia a mesma coisa que a CCelula primeira
 	}
 
-	// Verifica se a lista está vazia. Retorna TRUE se a lista estiver vazia e FALSE
+	// Verifica se a lista estï¿½ vazia. Retorna TRUE se a lista estiver vazia e FALSE
 	// se ela tiver elementos.
 	public boolean vazia() {
-		return primeira == ultima;
+		return primeira == ultima;	// Se isso for true a celula esta vazia
 	}
 
 	// Insere um novo Item no fim da lista.
 	public void insereFim(Object valorItem) {
-		ultima.prox = new CCelula(valorItem);
-		ultima = ultima.prox;
-		qtde++;
+		ultima.prox = new CCelula(valorItem);	// pega a referencia do ultima (normalmente NULL) e cria uma celula com o valor do item passado por parametro
+		ultima = ultima.prox;	// apos criar uma nova celula referenciada pela ultima, voce deve trocar a ultima, pois a ultima nao e mais a ultima (kkkkk so eu vou entender)
+		qtde++;	// Aumenta a quantidade, pois voce inseriu no fim
 	}
 
-	// Insere um novo Item no começo da lista
+	// Insere um novo Item no comeï¿½o da lista
 	public void insereComeco(Object valorItem) {
-		CCelula aux = primeira.prox;
-		primeira.prox = new CCelula(valorItem, aux);
-		if (aux == null)
-			ultima = primeira.prox;
-		qtde++;
+		CCelula aux = primeira.prox;	// Celula aux pega a referencia do primeiro
+		primeira.prox = new CCelula(valorItem, aux); 	// Adiciona uma nova celula passando valor do item e atualizando o proximo que sera a primeira celula antiga
+		if (aux == null)	// Se isso acontecer quer dizer que a lista tem apenas um item
+			ultima = primeira.prox;	// entao a ultima sera igual a referencia da primeira
+		qtde++;	// Aumenta a quantidade porque voce inseriu no comeco da Lista
 	}
 
 	public void insereComeco_old(Object valorItem) {
-		primeira.prox = new CCelula(valorItem, primeira.prox);
-		if (primeira.prox.prox == null)
-			ultima = primeira.prox;
-		qtde++;
+		primeira.prox = new CCelula(valorItem, primeira.prox); // Adiciona uma nova celula passando valor do item e atualizando o proximo que sera a primeira celula antiga
+		if (primeira.prox.prox == null) // Se isso acontecer quer dizer que a lista tem apenas um item
+			ultima = primeira.prox;	// entao a ultima sera igual a primeira
+		qtde++;	// Aumenta a quantidade porque voce adicionou um intem no inicio da Lista
 	}
 
-	// Insere o Item passado por parâmetro na posição determinada.
-	// O parâmetro "valorItem" é o item a ser inserido na lista.
-	// O parâmetro "posicao" é a posição na qual o elemento será inserido. O
-	// primeiro elemento está na posição 1, e assim por diante.
-	// Se a posição existir e o método conseguir inserir o elemento, retorna TRUE.
-	// Caso a posição não exista, retorna FALSE.
+	// Insere o Item passado por parï¿½metro na posiï¿½ï¿½o determinada.
+	// O parï¿½metro "valorItem" ï¿½ o item a ser inserido na lista.
+	// O parï¿½metro "posicao" ï¿½ a posiï¿½ï¿½o na qual o elemento serï¿½ inserido. O
+	// primeiro elemento estï¿½ na posiï¿½ï¿½o 1, e assim por diante.
+	// Se a posiï¿½ï¿½o existir e o mï¿½todo conseguir inserir o elemento, retorna TRUE.
+	// Caso a posiï¿½ï¿½o nï¿½o exista, retorna FALSE.
 	public boolean insereIndice(Object valorItem, int posicao) {
-		// Exercício
+		// Exercï¿½cio
 		return true;
 	}
 
 	// Imprime todos os elementos da lista usando o comando while
 	public void imprime() {
-		CCelula aux = primeira.prox;
+		CCelula aux = primeira.prox;	// Pegar a referencia para o primeiro item
 
-		while (aux != null) {
-			System.out.println(aux.item);
-			aux = aux.prox;
+		while (aux != null) {	// Se nao encontrar a referencia da ultima celula
+			System.out.println(aux.item);	// Vai printar todos os dados que estao inseridos dentro da Celula
+			aux = aux.prox;	// E a Celula aux ira ficar sempre pegando a proxima referencia ate atingir a ultima = null
 		}
 	}
 
@@ -95,22 +95,22 @@ public class CLista {
 		System.out.println("null");
 	}
 
-	// Verifica se o elemento passado como parâmetro está contido na lista.
-	// O parâmetro "elemento" é o item a ser localizado. O método retorna TRUE caso
+	// Verifica se o elemento passado como parï¿½metro estï¿½ contido na lista.
+	// O parï¿½metro "elemento" ï¿½ o item a ser localizado. O mï¿½todo retorna TRUE caso
 	// o Item esteja presente na lista.
 	public boolean contem(Object elemento) {
 		boolean achou = false;
-		CCelula aux = primeira.prox;
-		while (aux != null && !achou) {
-			achou = aux.item.equals(elemento);
-			aux = aux.prox;
+		CCelula aux = primeira.prox;	// Pegar a referencia do primeiro item da fila
+		while (aux != null && !achou) {	// Enquanto nao achar a referencia da ultima celula e variavel achou for igual a false o while ira continuar sendo executado
+			achou = aux.item.equals(elemento);	// Se aux.item for igual ao elemento procurado quer dizer que acho = true (sai do while)
+			aux = aux.prox;	// SenÃ£o ira atualizar a celula aux ate chegar na referencia da ultima 
 		}
 		return achou;
 	}
 
-	// Verifica se o elemento passado como parâmetro está contido na lista. (Obs:
+	// Verifica se o elemento passado como parï¿½metro estï¿½ contido na lista. (Obs:
 	// usando o comando FOR)
-	// O parâmetro "elemento" é o item a ser localizado. O método retorna TRUE caso
+	// O parï¿½metro "elemento" ï¿½ o item a ser localizado. O mï¿½todo retorna TRUE caso
 	// o Item esteja presente na lista.
 	public boolean contemFor(Object elemento) {
 		boolean achou = false;
@@ -118,32 +118,32 @@ public class CLista {
 			achou = aux.item.equals(elemento);
 		return achou;
 	}
-		
+
 	// Retorna um Object contendo o primeiro Item da lista. Se a lista estiver vazia
-	// a função retorna null.
+	// a funï¿½ï¿½o retorna null.
 	public Object retornaPrimeiro() {
-		if (primeira != ultima)
-			return primeira.prox.item;
+		if (primeira != ultima) // Se a celula nao estiver vazia
+			return primeira.prox.item;	// Pega a referencia para a primeira celula e retorna o item guardado nela 
 		else
 			return null;
 	}
 
-	// Retorna um Object contendo o último Item da lista. Se a lista estiver vazia a
-	// função retorna null.
+	// Retorna um Object contendo o ï¿½ltimo Item da lista. Se a lista estiver vazia a
+	// funï¿½ï¿½o retorna null.
 	public Object retornaUltimo() {
-		if (primeira != ultima)
-			return ultima.item;
+		if (primeira != ultima)	// Se a celula nao estiver vazia
+			return ultima.item;	// Retona o item que esta na ultima ceula
 		else
 			return null;
 	}
 
-	// Retorna o Item contido na posição passada por parâmetro
+	// Retorna o Item contido na posiï¿½ï¿½o passada por parï¿½metro
 	public Object retornaIndice(int posicao) {
-		// EXERCÍCIO : deve retornar o elemento da posição p passada por parâmetro
-		// [cabeça]->[7]->[21]->[13]->null
-		// retornaIndice(2) deve retornar o elemento 21. retornaIndice de uma posiçao
+		// EXERCï¿½CIO : deve retornar o elemento da posiï¿½ï¿½o p passada por parï¿½metro
+		// [cabeï¿½a]->[7]->[21]->[13]->null
+		// retornaIndice(2) deve retornar o elemento 21. retornaIndice de uma posiï¿½ao
 		// inexistente deve retornar null.
-		// Verifica se é uma posição válida e se a lista possui elementos
+		// Verifica se ï¿½ uma posiï¿½ï¿½o vï¿½lida e se a lista possui elementos
 		if ((posicao >= 1) && (posicao <= qtde) && (primeira != ultima)) {
 
 			// Procura a posicao a ser retornada
@@ -155,15 +155,15 @@ public class CLista {
 		return null;
 	}
 
-	// Remove e retorna o primeiro item da lista (remoção física, ou seja, elimina a
-	// célula que contém o elemento).
+	// Remove e retorna o primeiro item da lista (remoï¿½ï¿½o fï¿½sica, ou seja, elimina a
+	// cï¿½lula que contï¿½m o elemento).
 	// Retorna um Object contendo o Item removido ou null caso a lista esteja vazia.
 	public Object removeRetornaComeco() {
-		// Verifica se há elementos na lista
+		// Verifica se hï¿½ elementos na lista
 		if (primeira != ultima) {
 			CCelula aux = primeira.prox;
 			primeira.prox = aux.prox;
-			if (primeira.prox == null) // Se a célula cabeça está apontando para null, significa que o único elemento
+			if (primeira.prox == null) // Se a cï¿½lula cabeï¿½a estï¿½ apontando para null, significa que o ï¿½nico elemento
 										// da lista foi removido
 				ultima = primeira;
 			qtde--;
@@ -172,12 +172,12 @@ public class CLista {
 		return null;
 	}
 
-	// Remove e retorna o primeiro item da lista (remoção lógica, ou seja, remove a
-	// célula cabeça fazendo com que a célula seguinte ela se torne a nova célula
-	// cabeça).
+	// Remove e retorna o primeiro item da lista (remoï¿½ï¿½o lï¿½gica, ou seja, remove a
+	// cï¿½lula cabeï¿½a fazendo com que a cï¿½lula seguinte ela se torne a nova cï¿½lula
+	// cabeï¿½a).
 	// Retorna um Object contendo o item removido ou null caso a lista esteja vazia.
 	public Object removeRetornaComecoSimples() {
-		// Verifica se há elementos na lista
+		// Verifica se hï¿½ elementos na lista
 		if (primeira != ultima) {
 			primeira = primeira.prox;
 			qtde--;
@@ -186,8 +186,8 @@ public class CLista {
 		return null;
 	}
 
-	// Remove o primeiro item da lista fazendo com que a célula seguinte à célula
-	// cabeça se torne a nova célula cabeça. Não retorna o item removido.
+	// Remove o primeiro item da lista fazendo com que a cï¿½lula seguinte ï¿½ cï¿½lula
+	// cabeï¿½a se torne a nova cï¿½lula cabeï¿½a. Nï¿½o retorna o item removido.
 	public void removeComecoSemRetorno() {
 		if (primeira != ultima) {
 			primeira = primeira.prox;
@@ -195,7 +195,7 @@ public class CLista {
 		}
 	}
 
-	// Remove o último Item da lista.
+	// Remove o ï¿½ltimo Item da lista.
 	// Retorna um Object contendo o Item removido ou null caso a lista esteja vazia.
 	public Object removeRetornaFim() {
 		if (primeira != ultima) {
@@ -211,7 +211,7 @@ public class CLista {
 		return null;
 	}
 
-	// Remove o último Item da lista sem retorná-lo.
+	// Remove o ï¿½ltimo Item da lista sem retornï¿½-lo.
 	public void removeFimSemRetorno() {
 		if (primeira != ultima) {
 			CCelula aux = primeira;
@@ -223,8 +223,8 @@ public class CLista {
 		}
 	}
 
-	// Localiza o Item passado por parâmetro e o remove da Lista
-	// O parâmetro "valorItem" é o item a ser removido da lista.
+	// Localiza o Item passado por parï¿½metro e o remove da Lista
+	// O parï¿½metro "valorItem" ï¿½ o item a ser removido da lista.
 	public void remove(Object valorItem) {
 		if (primeira != ultima) {
 			CCelula aux = primeira;
@@ -244,13 +244,13 @@ public class CLista {
 		}
 	}
 
-	// Remove o elemento na posição passada como parâmetro.
-	// O parâmetro "posicao" é a posição a ser removida. OBS: o primeiro elemento
-	// está na posição 1, e assim por diante.
-	// O método retorna TRUE se a posição existe e foi removida com sucesso, e FALSE
-	// caso a posição não exista.
+	// Remove o elemento na posiï¿½ï¿½o passada como parï¿½metro.
+	// O parï¿½metro "posicao" ï¿½ a posiï¿½ï¿½o a ser removida. OBS: o primeiro elemento
+	// estï¿½ na posiï¿½ï¿½o 1, e assim por diante.
+	// O mï¿½todo retorna TRUE se a posiï¿½ï¿½o existe e foi removida com sucesso, e FALSE
+	// caso a posiï¿½ï¿½o nï¿½o exista.
 	public boolean removeIndice(int posicao) {
-		// Verifica se é uma posição válida e se a lista possui elementos
+		// Verifica se ï¿½ uma posiï¿½ï¿½o vï¿½lida e se a lista possui elementos
 		if ((posicao >= 1) && (posicao <= qtde) && (primeira != ultima)) {
 			int i = 0;
 			CCelula aux = primeira;
@@ -267,13 +267,13 @@ public class CLista {
 		return false;
 	}
 
-	// Remove e retorna o elemento na posição passada como parâmetro.
-	// O parâmetro "posicao" é a posição a ser removida. OBS: o primeiro elemento
-	// está na posição 1, e assim por diante.
-	// O método retorna um object contendo o elemento removido da lista. Caso a
-	// posição seja inválida, retorna null.
+	// Remove e retorna o elemento na posiï¿½ï¿½o passada como parï¿½metro.
+	// O parï¿½metro "posicao" ï¿½ a posiï¿½ï¿½o a ser removida. OBS: o primeiro elemento
+	// estï¿½ na posiï¿½ï¿½o 1, e assim por diante.
+	// O mï¿½todo retorna um object contendo o elemento removido da lista. Caso a
+	// posiï¿½ï¿½o seja invï¿½lida, retorna null.
 	public Object removeRetornaIndice(int posicao) {
-		// Verifica se é uma posição válida e se a lista possui elementos
+		// Verifica se ï¿½ uma posiï¿½ï¿½o vï¿½lida e se a lista possui elementos
 		if ((posicao >= 1) && (posicao <= qtde) && (primeira != ultima)) {
 			int i = 0;
 			CCelula aux = primeira;
@@ -291,9 +291,9 @@ public class CLista {
 		return null;
 	}
 
-	// Método(getter) que retorna a quantidade de itens da lista.
+	// Mï¿½todo(getter) que retorna a quantidade de itens da lista.
 	public int quantidade() {
-		return qtde;
+		return qtde; // Retorna a quantidade de itens que tem na Lista
 	}
 
 }

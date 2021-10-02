@@ -10,21 +10,21 @@ public class CFila {
 	private int qtde;
 
 	/**
-	 * Função construtora. Cria a célula cabeça e faz as referências frente e tras
+	 * Funï¿½ï¿½o construtora. Cria a cï¿½lula cabeï¿½a e faz as referï¿½ncias frente e tras
 	 * apontarem para ela.
 	 */
 	public CFila() {
-		frente = new CCelula();
+		frente = new CCelula(); 	// Inicializa uma cÃ©lula cabeÃ§a referenciada pela frente e pelo tras
 		tras = frente;
 	}
 
 	/**
-	 * Verifica se a fila está vazia.
+	 * Verifica se a fila estï¿½ vazia.
 	 * 
-	 * @return Retorna TRUE se a fila estiver vazia e FALSE caso contrário.
+	 * @return Retorna TRUE se a fila estiver vazia e FALSE caso contrï¿½rio.
 	 */
 	public boolean vazia() {
-		return frente == tras;
+		return frente == tras;	// Se frente for igual o tras quer dizer que a fila estÃ¡ vazia porque so tem a cÃ©lula cabeÃ§a
 	}
 
 	/**
@@ -32,21 +32,21 @@ public class CFila {
 	 */
 	public void mostra() {
 		System.out.print("[ ");
-		for (CCelula c = frente.prox; c != null; c = c.prox)
-			System.out.print(c.item + " ");
+		for (CCelula c = frente.prox; c != null; c = c.prox) // c vai ser igual o primeira referencia, se c for diferente de null vai continuar no for (pois a celula final sempre aponta para NULL)
+			System.out.print(c.item + " ");					 // para incrementar ele pega a proxima referencia 
 		System.out.println("] ");
 	}
 
 	/**
 	 * Insere um novo Item no fim da fila.
 	 * 
-	 * @param valorItem O parametro "valorItem" é um Object contendo o elemento a
+	 * @param valorItem O parametro "valorItem" ï¿½ um Object contendo o elemento a
 	 *                  ser inserido no final da fila.
 	 */
 	public void enfileira(Object valorItem) {
-		tras.prox = new CCelula(valorItem);
-		tras = tras.prox;
-		qtde++;
+		tras.prox = new CCelula(valorItem);	// cria uma celular depois da ultuma e adiciona o valorItem que deve ser adicionado
+		tras = tras.prox;	// referencia o tras como a ultima celula criada
+		qtde++;	// aumenta o tamanho da fila, pois voce enfileirou um item a mais
 	}
 
 	/**
@@ -57,15 +57,15 @@ public class CFila {
 	 */
 	public Object desenfileira() {
 		Object item = null;
-		if (frente != tras) {
-			frente = frente.prox;
-			item = frente.item;
-			qtde--;
+		if (frente != tras) {	// Se frente for diferente de tras quer dizer que a fila nao esta vazia
+			frente = frente.prox;	// pega a referencia da celula cabeca
+			item = frente.item;		// Object item guarda o dado armazenado na celula que a celula cabeca referencia
+			qtde--;	// diminui a quantidade de itens para remocao fisica
 		}
 		return item;
 	}
-		
-	// Idêntico ao método anterior, mas sem usar a variável temporária item
+
+	// Idï¿½ntico ao mï¿½todo anterior, mas sem usar a variï¿½vel temporï¿½ria item
 	public Object desenfileirav2() {
 		if (frente != tras) {
 			frente = frente.prox;
@@ -74,7 +74,6 @@ public class CFila {
 		}
 		return null;
 	}
-	
 
 	/**
 	 * Retorna o primeiro Item da fila sem remove-lo.
@@ -86,7 +85,7 @@ public class CFila {
 			return frente.prox.item;
 		else
 			return null;
-		//return (frente != tras)? frente.prox.item : null;
+		// return (frente != tras)? frente.prox.item : null;
 	}
 
 	/**
@@ -94,16 +93,16 @@ public class CFila {
 	 * 
 	 * @param valorItem O parametro "valorItem" e um object contendo o Item a ser
 	 *                  localizado.
-	 * @return O método retorna TRUE caso o item esteja presente na fila.
+	 * @return O mï¿½todo retorna TRUE caso o item esteja presente na fila.
 	 */
 	public boolean contem(Object valorItem) {
-		CCelula aux = frente.prox;
-		while (aux != null) {
-			if (aux.item.equals(valorItem))
-				return true;
-			aux = aux.prox;
+		CCelula aux = frente.prox;	// celula auxiliar que serve para pegar o primeiro item da fila 
+		while (aux != null) { // Saber se a fila contem itens 
+			if (aux.item.equals(valorItem))	// ver se a variavel auxiliar que tem o item e igual ao valor procurado
+				return true;	// se for igual retorna true
+			aux = aux.prox;	// se nap for igual incrementa para a proxima referencia
 		}
-		return false;
+		return false;	// Se nao contem na fila, retorna false
 	}
 
 	/**
@@ -115,10 +114,10 @@ public class CFila {
 	 * @return Retorna TRUE caso o Item esteja presente na fila.
 	 */
 	public boolean contemFor(Object valorItem) {
-		for (CCelula aux = frente.prox; aux != null; aux = aux.prox)
-			if (aux.item.equals(valorItem))
-				return true;
-		return false;
+		for (CCelula aux = frente.prox; aux != null; aux = aux.prox) // Celula aux pega a referencia do primeiro item da fila, enquanto aux != NULL (pois a ultima celula referencia NULL) vai pegar a proxima referencia da fila
+			if (aux.item.equals(valorItem))	// ver se o item que eles procuram esta na fila
+				return true;	// se estiver na fila retorna true
+		return false;	// se nao estiver na fila retorn false
 	}
 
 	/**
@@ -127,7 +126,7 @@ public class CFila {
 	 * @return
 	 */
 	public int quantidade() {
-		return qtde;
+		return qtde;	// retorna a quantidade de itens que tem na fila para uma consulta, por exemplo!
 	}
 
 }

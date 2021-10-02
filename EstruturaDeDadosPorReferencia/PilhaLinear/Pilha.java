@@ -31,7 +31,7 @@ class Pilha {
 	 * @param Elemento a ser inserido.
 	 */
 	public boolean empilha(Object item) {
-		// Validar a inserção
+		// Validar a inserï¿½ï¿½o
 		if (qtde < array.length) {
 			array[qtde] = item;
 			qtde++;
@@ -41,7 +41,7 @@ class Pilha {
 	}
 
 	/**
-	 * Desempilha um elemento da pilha (o último elemento inserido).
+	 * Desempilha um elemento da pilha (o ï¿½ltimo elemento inserido).
 	 * 
 	 * @return Elemento removido.
 	 */
@@ -55,8 +55,8 @@ class Pilha {
 	 * Mostra os elementos da lista separados por espacos.
 	 */
 	public void mostrar() {
-		for (int i = qtde-1; i >= 0; i--) {
-			System.out.println("["+array[i]+"]");
+		for (int i = qtde - 1; i >= 0; i--) {
+			System.out.println("[" + array[i] + "]");
 		}
 	}
 
@@ -64,7 +64,7 @@ class Pilha {
 	 * Procura um elemento e retorna se ele existe.
 	 * 
 	 * @param item: O elemento a ser pesquisado.
-	 * @return Retorna true se o item existir, false caso contrário.
+	 * @return Retorna true se o item existir, false caso contrï¿½rio.
 	 */
 	public boolean pesquisar(Object item) {
 		for (int i = 0; i < qtde; i++)

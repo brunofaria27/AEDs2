@@ -6,8 +6,8 @@
  */
 public class FilaCircular {
    private Object[] array;
-   private int frente; // Aponta para a posição do vetor que armazena o primeiro elemento da fila
-   private int tras;   // Aponta para a posição do vetor que armazena o último elemento da fila
+   private int frente; // Aponta para a posiï¿½ï¿½o do vetor que armazena o primeiro elemento da fila
+   private int tras; // Aponta para a posiï¿½ï¿½o do vetor que armazena o ï¿½ltimo elemento da fila
 
    /**
     * Construtor da classe.
@@ -18,68 +18,71 @@ public class FilaCircular {
 
    /**
     * Construtor da classe.
+    * 
     * @param tamanho Tamanho da fila.
     */
-   public FilaCircular(int tamanho){
+   public FilaCircular(int tamanho) {
       array = new Object[tamanho];
       frente = tras = 0;
    }
 
    /**
-    * Insere um elemento na última posição da fila.
+    * Insere um elemento na ï¿½ltima posiï¿½ï¿½o da fila.
+    * 
     * @param Object item: elemento a ser inserido.
     */
    public boolean enfileira(Object item) {
-    if (tras - frente < array.length) {
-       array[tras % array.length] = item;
-       tras++;
-       return true;
-     }
-     return false;
+      if (tras - frente < array.length) {
+         array[tras % array.length] = item;
+         tras++;
+         return true;
+      }
+      return false;
    }
 
    /**
-    * Remove o elemento armazenado no posição referenciada pelo índice "frente".
+    * Remove o elemento armazenado no posiï¿½ï¿½o referenciada pelo ï¿½ndice "frente".
+    * 
     * @return Elemento desenfileirado.
     */
    public Object desenfileira() {
-      //validar remocao
+      // validar remocao
       if (frente == tras)
          return null;
-      else 
-        return array[frente++];
+      else
+         return array[frente++];
    }
 
-    public void imprimeVet() {
+   public void imprimeVet() {
       System.out.print("[ ");
-      for(int i = 0; i < array.length; i++)
+      for (int i = 0; i < array.length; i++)
          System.out.print(array[i] + " ");
       System.out.println("]");
-    }
-    
-    /**
-     * Mostra os elementos da Fila separados por espaços.
-     */    
-   public void mostrar (){
+   }
+
+   /**
+    * Mostra os elementos da Fila separados por espaï¿½os.
+    */
+   public void mostrar() {
       System.out.print("[ ");
 
-      for(int i = frente; i < tras; i++)
+      for (int i = frente; i < tras; i++)
          System.out.print(array[i % array.length] + " ");
 
       System.out.println("]");
    }
 
    /**
-    * Mostra os elementos da Fila separados por espaços (método recursivo).
-    */  
-   public void mostrarRec(){
+    * Mostra os elementos da Fila separados por espaï¿½os (mï¿½todo recursivo).
+    */
+   public void mostrarRec() {
       System.out.print("[ ");
       mostrarRec(frente);
       System.out.println("]");
    }
 
-   public void mostrarRec(int i){
-      if(i != tras){
+   public void mostrarRec(int i) {
+      if (i != tras) {
          System.out.print(array[i % array.length] + " ");
          mostrarRec(++i);
       }
@@ -87,9 +90,10 @@ public class FilaCircular {
 
    /**
     * Retorna um boolean indicando se a fila esta vazia
+    * 
     * @return boolean indicando se a fila esta vazia
     */
    public boolean vazia() {
-      return frente == tras; 
+      return frente == tras;
    }
 }

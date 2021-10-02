@@ -119,7 +119,7 @@ class CListaDup {
 			return ultima.item;
 		return null;
 	}
-	
+
 	// Remove o primeiro elemento da lista. Na verdade, remove a referencia para a
 	// celula cabeca, e torna a primeira celula na nova celula cabeca
 	public void removeComecoSemRetorno() {
@@ -129,7 +129,7 @@ class CListaDup {
 			qtde--;
 		}
 	}
-	
+
 	// Remove e retorna o primeiro elemento da lista.
 	public Object removeRetornaComeco() {
 		if (primeira != ultima) {
@@ -140,7 +140,7 @@ class CListaDup {
 			return aux.item;
 		}
 		return null;
-	}	
+	}
 
 	// Remove o ultimo elemento da lista. Na verdade, remove as referencias para a
 	// ultima celula, forcando que o Garbage Collector desaloque a ultima celula
@@ -151,7 +151,7 @@ class CListaDup {
 			qtde--;
 		}
 	}
-	
+
 	// Remove e retorna o ultimo elemento da lista.
 	public Object removeRetornaFim() {
 		if (primeira != ultima) {
@@ -162,7 +162,7 @@ class CListaDup {
 			return aux.item;
 		}
 		return null;
-	}	
+	}
 
 	// Localiza o Item passado por parametro e o remove da Lista
 	public void remove(Object valorItem) {
@@ -186,7 +186,7 @@ class CListaDup {
 			}
 		}
 	}
-	
+
 	// EXERCÍCIO - Criar o método removeRetornaIndice(int pos)
 	public Object removeRetornaIndice(int pos) {
 		return null;

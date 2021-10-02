@@ -1,4 +1,3 @@
-
 class CCelulaDup {
 
 	public Object item; // O Item armazendo pela clula

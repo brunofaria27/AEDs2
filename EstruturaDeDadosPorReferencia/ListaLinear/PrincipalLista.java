@@ -15,13 +15,13 @@ public class PrincipalLista {
       System.out.print("Apos insercoes: ");
       lista.mostrar();
 
-      x1 = (int)lista.removerInicio(); // Typecasting
-      x2 = (int)lista.removerFim();
-      x3 = (int)lista.remover(2);
+      x1 = (int) lista.removerInicio(); // Typecasting
+      x2 = (int) lista.removerFim();
+      x3 = (int) lista.remover(2);
 
       System.out.print("Apos remocoes (" + x1 + ", " + x2 + ", " + x3 + "):");
       lista.mostrar();
-      
+
       alunos.inserirFim("Hugo");
       alunos.inserirFim("Pedro");
       alunos.inserirFim("Daniella");
@@ -29,7 +29,7 @@ public class PrincipalLista {
       alunos.inserirFim("Isabel");
       alunos.inserirFim("Leonardo");
       alunos.inserir("Alexandre", 3);
-      
-      alunos.mostrar();    
+
+      alunos.mostrar();
    }
 }

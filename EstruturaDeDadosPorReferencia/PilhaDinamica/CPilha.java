@@ -9,19 +9,19 @@ public class CPilha {
 	private int qtde;
 
 	/**
-	 * Função construtora.
+	 * Funï¿½ï¿½o construtora.
 	 */
 	public CPilha() {
-		// nenhum código
+		// nenhum cï¿½digo
 	}
 
 	/**
-	 * Verifica se a Pilha está vazia.
+	 * Verifica se a Pilha estï¿½ vazia.
 	 * 
-	 * @return Retorna TRUE se a PILHA estiver vazia e FALSE caso contrário.
+	 * @return Retorna TRUE se a PILHA estiver vazia e FALSE caso contrï¿½rio.
 	 */
 	public boolean vazia() {
-		return topo == null;
+		return topo == null; // Se o topo for igual a NULL quer dizer que a PILHA estÃ¡ vazia
 	}
 
 	/**
@@ -30,8 +30,8 @@ public class CPilha {
 	 * @param valorItem: Um Object contendo o item a ser inserido no topo da Pilha
 	 */
 	public void empilha(Object valorItem) {
-		topo = new CCelula(valorItem, topo);
-		qtde++;
+		topo = new CCelula(valorItem, topo); // Cria uma nova Celula no topo da pilha e referencia o topo anterior
+		qtde++;	// Aumenta a quantidade, pois voce empilhou uma celula na pilha
 	}
 
 	/**
@@ -42,35 +42,35 @@ public class CPilha {
 	 */
 	public Object desempilha() {
 		Object item = null;
-		if (topo != null) {
-			item = topo.item;
-			topo = topo.prox;
-			qtde--;
+		if (topo != null) { // Se topo for diferente de null quer dizer que tem celulas na pilha 
+			item = topo.item;	// Pega o item que estava no topo e guarda em item
+			topo = topo.prox;	// Fala que o topo agora e a celula que estava abaixo do topo
+			qtde--;	// Retira um da quantidade para fazer a remocao fisica
 		}
-		return item;
+		return item;	// Retorna o item removido da pilha
 	}
 
 	/**
-	 * Verifica se o item passado como parâmetro está contido na lista.
+	 * Verifica se o item passado como parï¿½metro estï¿½ contido na lista.
 	 * 
-	 * @param O parâmetro "valorItem" é um object contendo o item a ser localizado.
+	 * @param O parï¿½metro "valorItem" ï¿½ um object contendo o item a ser localizado.
 	 * @return Retorna TRUE caso o item esteja presente na pilha.
 	 */
 	public boolean contem(Object valorItem) {
-		CCelula aux = topo;
-		while (aux != null) {
-			if (aux.item.equals(valorItem))
+		CCelula aux = topo;  // A celula aux e igual ao topo
+		while (aux != null) {	// Se esse while for verdadeiro quer dizer que tem item na pilha
+			if (aux.item.equals(valorItem))	// Se o item de aux for igual ao procurado retorna true
 				return true;
-			aux = aux.prox;
+			aux = aux.prox; // Se nao cair no If quer dizer que voce deve pegar a proxima celula sempre de cima para baixo (Pilha)
 		}
-		return false;
+		return false; // Se nao achar o item retorna false
 	}
 
 	/**
-	 * Verifica se o item passado como parâmetro está contido na pilha. (Obs: usa o
+	 * Verifica se o item passado como parï¿½metro estï¿½ contido na pilha. (Obs: usa o
 	 * comando FOR)
 	 * 
-	 * @param valorItem O parâmetro "valorItem" é um object contendo o item a ser
+	 * @param valorItem O parï¿½metro "valorItem" ï¿½ um object contendo o item a ser
 	 *                  localizado.
 	 * @return Retorna TRUE caso o item esteja presente na pilha.
 	 */
@@ -88,7 +88,7 @@ public class CPilha {
 	 *         esteja vazia retorna null.
 	 */
 	public Object peek() {
-		return (topo != null) ? topo.item : null;
+		return (topo != null) ? topo.item : null; // Se topo for diferente de null quer dizer que tem item na pilha entao retorna o topo, senao vai retornar null
 	}
 
 	/**
@@ -106,10 +106,10 @@ public class CPilha {
 	}
 
 	/**
-	 * Método que retorna a quantidade de itens da Pilha. Getter
+	 * Mï¿½todo que retorna a quantidade de itens da Pilha. Getter
 	 */
 	public int quantidade() {
-		return qtde;
+		return qtde; // Retorna a quantidade de itens que tem na Pilha
 	}
 
 }
