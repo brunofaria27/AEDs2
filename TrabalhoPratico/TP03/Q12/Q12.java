@@ -214,77 +214,88 @@ class Serie {
     }
 }
 
-// FIFO - FirstIn-FirstOut
-class FilaCircular {
-    private Serie[] arraySerie;
-    private int primeiro;
-    private int ultimo;
+class CCelula {
+    public Serie item;
+    public CCelula prox;
 
-    public FilaCircular() {
-        this(6);
+    public CCelula(Serie valorItem, CCelula proxCelula) {
+        item = valorItem;
+        prox = proxCelula;
     }
 
-    public FilaCircular(int tamanho) {
-        arraySerie = new Serie[tamanho];
-        primeiro = ultimo = 0;
+    public CCelula(Serie valorItem) {
+        item = valorItem;
+        prox = null;
     }
 
-    public void inserir(Serie serie) throws Exception {
-        if(((ultimo + 1) % arraySerie.length) == primeiro) {
-            remover();
-        }
-
-        // Inserir um elemento no final da fila
-        arraySerie[ultimo] = serie;
-        ultimo = (ultimo + 1) % arraySerie.length;
-    }
-
-    public void remover() throws Exception {
-        if(primeiro == ultimo) {
-            throw new Exception("Erro ao remover elemento.");
-        }
-
-        // Atualiza o valor da primeira posição retirando o primeiro item da Fila
-        primeiro = (primeiro + 1) % arraySerie.length;
-    }
-
-    public void mostrar() {
-        int i = primeiro;
-
-        while(i != ultimo) {
-            System.out.println(arraySerie[i]);
-            i = (i + 1) % arraySerie.length;
-        }
-
-    }
-
-    public int tamanho (){
-        int contador = 0;
-    
-        for(int i = primeiro; i != ultimo; i = ((i + 1) % arraySerie.length)) {
-           contador = contador + 1;
-        }
-
-        return contador;
-    }
-
-    public int mediaArredondada() {
-        double soma = 0;
-        int resultado = 0;
-        double contador = 0;
-
-        for(int i = primeiro; i != ultimo; i = ((i + 1) % arraySerie.length)) {
-            soma = soma + arraySerie[i].getNumeroTemporadas();
-            contador++;
-        }
-
-        resultado = (int)Math.round(soma / contador);
-
-        return resultado;
+    public CCelula() {
+        item = null;
+        prox = null;
     }
 }
 
-class Q07 {
+class Pilha {
+	private CCelula topo = null;
+	private int qtde;
+
+	public Pilha() {
+	}
+
+	public boolean vazia() {
+		return topo == null;
+	}
+
+	public void empilha(Serie valorItem) {
+		topo = new CCelula(valorItem, topo);
+		qtde++;
+	}
+
+	public Serie desempilha() {
+		Serie item = null;
+		if (topo != null) {
+			item = topo.item;
+			topo = topo.prox;
+			qtde--;
+		}
+		return item;
+	}
+
+	public boolean contem(Serie valorItem) {
+		CCelula aux = topo;
+		while (aux != null) {
+			if (aux.item.equals(valorItem))
+				return true;
+			aux = aux.prox;
+		}
+		return false;
+	}
+
+	public boolean contemFor(Serie valorItem) {
+		for (CCelula aux = topo; aux != null; aux = aux.prox)
+			if (aux.item.equals(valorItem))
+				return true;
+		return false;
+	}
+
+	public Serie peek() {
+		return (topo != null) ? topo.item : null;
+	}
+
+	public void mostra() {
+		for (CCelula c = topo; c != null; c = c.prox)
+		    System.out.println(c.item);
+	}
+
+	public int quantidade() {
+		return qtde;
+	}
+
+}
+
+class Q12 {
+    static Serie[] removidos = new Serie[20];   // Series removidas da lista
+    static int r = 0;                           // contador removidos
+
     public static Serie lerDados(String entrada) throws Exception {
         Serie serie = new Serie(); 
         String arquivo = "";
@@ -298,20 +309,25 @@ class Q07 {
         return serie;
     }
 
-    public static void tratarComando(String seriesEntrada, FilaCircular fila) throws Exception {
-        String[] aux = seriesEntrada.split(" ");
+    public static void printaRemovidos() {
+        for(int i = 0; i < r; i++) {
+            MyIO.println("(R) "+ removidos[i].getNome());
+        }
+    }
 
+    public static void addPilha(Pilha pilha, String[] entrada, int n) throws Exception {
+        for(int i = 0; i < n; i++) {
+            pilha.empilha(lerDados(entrada[i]));
+        }
+    }
+
+    public static void tratarComando(String seriesEntrada, Pilha pilha) throws Exception {
         if(seriesEntrada.charAt(0) == 'I') {
-            if(fila.tamanho() < 5) {
-                fila.inserir(lerDados(aux[1]));
-                System.out.println(fila.mediaArredondada());
-            } else if(fila.tamanho() == 5) {
-                fila.remover();
-                fila.inserir(lerDados(aux[1]));
-                System.out.println(fila.mediaArredondada());
-            }
+            String[] aux = seriesEntrada.split(" ");
+            pilha.empilha(lerDados(aux[1]));
         } else if(seriesEntrada.charAt(0) == 'R') {
-            fila.remover();
+            removidos[r] = pilha.desempilha();
+            r++;
         }
     }
 
@@ -321,7 +337,7 @@ class Q07 {
 
     public static void main(String[] args) throws Exception {
         MyIO.setCharset("UTF-8");
-        FilaCircular fila = new FilaCircular();
+
         // Inicialização váriaveis
         String[] entrada = new String[1000];
         int numEntrada = 0;
@@ -333,24 +349,21 @@ class Q07 {
         } while (isFim(entrada[numEntrada++]) == false);
         numEntrada--; // Desconsiderar a palavra FIM
 
-        for(int i = 0; i < numEntrada; i++) {
-            fila.inserir(lerDados(entrada[i]));
-//            fila.mostrar(); -> Teste para ver se a fila funciona
-            System.out.println(fila.mediaArredondada());
-//            System.out.println("--------------------");   -> Separar na hora de testar
-        }
-    
+        Pilha pilhaSeries = new Pilha();
+        addPilha(pilhaSeries, entrada, numEntrada);
+        
         int quantidade = MyIO.readInt();
         String[] seriesEntrada = new String[quantidade];
 
         // Ler as demais entradas
         do {
             seriesEntrada[contador] = MyIO.readLine();
-            tratarComando(seriesEntrada[contador], fila);
+            tratarComando(seriesEntrada[contador], pilhaSeries);
             contador++;
         } while (contador < quantidade);
 
-        fila.mostrar();
+        printaRemovidos();
+        pilhaSeries.mostra();
 
     }
 }
