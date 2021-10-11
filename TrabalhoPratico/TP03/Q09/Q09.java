@@ -273,7 +273,7 @@ class Q09 {
         while (left <= meio || right <= dir) {
             if (left <= meio && right <= dir) {
                 comparacoes += 3;
-                if (tmp[left].getNumeroEpisodios() < tmp[right].getNumeroEpisodios() || tmp[left].getNumeroEpisodios() > tmp[right].getNumeroEpisodios()) {
+                if (tmp[left].getNumeroEpisodios() < tmp[right].getNumeroEpisodios() || tmp[left].getNumeroEpisodios() == tmp[right].getNumeroEpisodios() && tmp[left].getNome().compareTo(tmp[right].getNome()) < 0 ) {
                     series[pos] = tmp[left];
                     left++;
                 } else {

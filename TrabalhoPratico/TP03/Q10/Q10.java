@@ -247,7 +247,39 @@ class Q10 {
         return serie;
     }
 
+    public static void swap(int i, int j, Serie[] array) {
+        Serie temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
     
+    public static int maxValue(int n, Serie[] series) {
+        int maxEp = series[0].getNumeroEpisodios();
+        int maxTp = series[0].getNumeroTemporadas();
+    
+        for(int i = 1; i < n; i++) {
+            if(series[i].getNumeroEpisodios() > maxEp) {
+                maxEp = series[i].getNumeroEpisodios();
+            }
+        }
+
+        for(int i = 1; i < n; i++) {
+            if(series[i].getNumeroTemporadas() > maxTp) {
+                maxTp = series[i].getNumeroTemporadas();
+            }
+        }
+    
+        return maxEp * 1000 + maxTp;
+    }
+
+    public static void radixsort(int n, Serie[] series) {
+        int maior = maxValue(n, series);
+    
+        for(int exp = 1; maior / exp > 0; exp *= 10) {
+            countingsort(n,exp);
+        }
+    
+    }
 
     public static long now() {
         return new Date().getTime();
@@ -281,7 +313,7 @@ class Q10 {
 
         double tempo = (fim - inicio) / 1000.0;
 
-        Arq.openWrite("matricula_mergesort.txt", "UTF-8");
+        Arq.openWrite("matricula_radixsort.txt", "UTF-8");
         Arq.print("Matricula : 742238 \t");
         Arq.print("Tempo de execução : " + tempo + "s \t");
         Arq.print("Numero de Comparaçoes : " + comparacoes);

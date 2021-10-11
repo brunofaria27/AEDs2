@@ -247,7 +247,7 @@ class Q01 {
            int menor = i;
            for(int j = (i + 1); j < numentrada; j++) {
                comparacoes++;
-              if(series[menor].getPaisOrigem().compareTo(series[j].getPaisOrigem()) > 0) {
+              if(series[menor].getPaisOrigem().compareTo(series[j].getPaisOrigem()) > 0 || series[menor].getPaisOrigem().compareTo(series[j].getPaisOrigem()) == 0 && series[menor].getNome().compareTo(series[j].getNome()) > 0) {
                 menor = j;
               }
            }
@@ -256,7 +256,7 @@ class Q01 {
 
     }
 
-    public static long now(){
+    public static long now() {
         return new Date().getTime();
     }  
 
@@ -277,7 +277,6 @@ class Q01 {
 
         Serie[] series = lerDados(entrada, numEntrada);
 
-        // Printar na tela e gravar no arquivo matricula_sequencial
         long inicio = now();
         selectionSort(series, numEntrada);
         long fim = now();

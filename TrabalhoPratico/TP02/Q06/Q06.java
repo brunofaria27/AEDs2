@@ -26,8 +26,8 @@ class Serie {
         this.numeroEpisodios = 0;
     }
 
-    Serie(String nome, String formato, String duracao, String paisOrigem, String idioma,
-            String emissoraOriginal, String transmissaoOriginal, int numeroTemporadas, int numeroEpisodios) {
+    Serie(String nome, String formato, String duracao, String paisOrigem, String idioma, String emissoraOriginal,
+            String transmissaoOriginal, int numeroTemporadas, int numeroEpisodios) {
         this.nome = nome;
         this.formato = formato;
         this.duracao = duracao;
@@ -39,7 +39,7 @@ class Serie {
         this.numeroEpisodios = numeroEpisodios;
     }
 
-    public Serie Clone(){
+    public Serie Clone() {
         Serie clone = new Serie();
         clone.nome = this.nome;
         clone.formato = this.formato;
@@ -130,10 +130,10 @@ class Serie {
         String newLine = "";
 
         int i = 0;
-        while(i < line.length()) {
-            if(line.charAt(i) == '<') {
+        while (i < line.length()) {
+            if (line.charAt(i) == '<') {
                 i++;
-                while(line.charAt(i) != '>') {
+                while (line.charAt(i) != '>') {
                     i++;
                 }
             } else {
@@ -150,8 +150,8 @@ class Serie {
         BufferedReader br = new BufferedReader(isr);
 
         int posPonto = 0;
-        for(int i = 0; i < nomeArquivo.length(); i++) {
-            if(nomeArquivo.charAt(i) == '.') {
+        for (int i = 0; i < nomeArquivo.length(); i++) {
+            if (nomeArquivo.charAt(i) == '.') {
                 posPonto = i;
             }
         }
@@ -159,46 +159,58 @@ class Serie {
         nome = nome.replace('_', ' ');
         this.nome = nome;
 
-        while(!br.readLine().contains("Formato"));
+        while (!br.readLine().contains("Formato"))
+            ;
         this.formato = removeTags(br.readLine()).replaceAll("&#160;", "").replaceAll("&nbsp;", "").trim();
 
-        while(!br.readLine().contains("Duração"));
+        while (!br.readLine().contains("Duração"))
+            ;
         this.duracao = removeTags(br.readLine()).replaceAll("&#160;", "").replaceAll("&nbsp;", "").trim();
 
-        while(!br.readLine().contains("País de origem"));
+        while (!br.readLine().contains("País de origem"))
+            ;
         this.paisOrigem = removeTags(br.readLine()).replaceAll("&#160;", "").replaceAll("&nbsp;", "").trim();
 
-        while(!br.readLine().contains("Idioma original"));
+        while (!br.readLine().contains("Idioma original"))
+            ;
         this.idioma = removeTags(br.readLine()).replaceAll("&#160;", "").replaceAll("&nbsp;", "").trim();
 
-        while(!br.readLine().contains("Emissora de televisão original"));
+        while (!br.readLine().contains("Emissora de televisão original"))
+            ;
         this.emissoraOriginal = removeTags(br.readLine()).replaceAll("&#160;", "").replaceAll("&nbsp;", "").trim();
 
-        while(!br.readLine().contains("Transmissão original"));
+        while (!br.readLine().contains("Transmissão original"))
+            ;
         this.transmissaoOriginal = removeTags(br.readLine()).replaceAll("&#160;", "").replaceAll("&nbsp;", "").trim();
 
-        while(!br.readLine().contains("N.º de temporadas"));
+        while (!br.readLine().contains("N.º de temporadas"))
+            ;
         String numTe = removeTags(br.readLine()).trim();
         String guardaNum = "";
-        for(int i = 0; i < numTe.length(); i++) {
-            if(numTe.charAt(i) == '0' || numTe.charAt(i) == '1' || numTe.charAt(i) == '2' || numTe.charAt(i) == '3' || numTe.charAt(i) == '4' ||
-            numTe.charAt(i) == '5' || numTe.charAt(i) == '6' || numTe.charAt(i) == '7' || numTe.charAt(i) == '8' || numTe.charAt(i) == '9') {
+        for (int i = 0; i < numTe.length(); i++) {
+            if (numTe.charAt(i) == '0' || numTe.charAt(i) == '1' || numTe.charAt(i) == '2' || numTe.charAt(i) == '3'
+                    || numTe.charAt(i) == '4' || numTe.charAt(i) == '5' || numTe.charAt(i) == '6'
+                    || numTe.charAt(i) == '7' || numTe.charAt(i) == '8' || numTe.charAt(i) == '9') {
                 guardaNum = guardaNum + numTe.charAt(i);
-            } else if(numTe.charAt(i) == '(' || numTe.charAt(i) == '-' || numTe.charAt(i) == '+' || numTe.charAt(i) == ' ') {
+            } else if (numTe.charAt(i) == '(' || numTe.charAt(i) == '-' || numTe.charAt(i) == '+'
+                    || numTe.charAt(i) == ' ') {
                 break;
             }
         }
         int num = Integer.parseInt(guardaNum);
         this.numeroTemporadas = num;
 
-        while(!br.readLine().contains("N.º de episódios"));
+        while (!br.readLine().contains("N.º de episódios"))
+            ;
         String numEp = removeTags(br.readLine()).trim();
         guardaNum = "";
-        for(int i = 0; i < numEp.length(); i++) {
-            if(numEp.charAt(i) == '0' || numEp.charAt(i) == '1' || numEp.charAt(i) == '2' || numEp.charAt(i) == '3' || numEp.charAt(i) == '4' ||
-            numEp.charAt(i) == '5' || numEp.charAt(i) == '6' || numEp.charAt(i) == '7' || numEp.charAt(i) == '8' || numEp.charAt(i) == '9') {
+        for (int i = 0; i < numEp.length(); i++) {
+            if (numEp.charAt(i) == '0' || numEp.charAt(i) == '1' || numEp.charAt(i) == '2' || numEp.charAt(i) == '3'
+                    || numEp.charAt(i) == '4' || numEp.charAt(i) == '5' || numEp.charAt(i) == '6'
+                    || numEp.charAt(i) == '7' || numEp.charAt(i) == '8' || numEp.charAt(i) == '9') {
                 guardaNum = guardaNum + numEp.charAt(i);
-            } else if(numEp.charAt(i) == '(' || numEp.charAt(i) == '-' || numEp.charAt(i) == '+' || numEp.charAt(i) == ' ') {
+            } else if (numEp.charAt(i) == '(' || numEp.charAt(i) == '-' || numEp.charAt(i) == '+'
+                    || numEp.charAt(i) == ' ') {
                 break;
             }
         }
@@ -206,98 +218,78 @@ class Serie {
         this.numeroEpisodios = num;
 
         br.close();
+        // System.out.println(this.toString());
     }
-    
+
     public String toString() {
         return nome + " " + formato + " " + duracao + " " + paisOrigem + " " + idioma + " " + emissoraOriginal + " "
                 + transmissaoOriginal + " " + numeroTemporadas + " " + numeroEpisodios;
     }
 }
 
-class Pilha {
-    private Serie[] array;
-    private int n;
+class Q14 {
+    static int comparacoes = 0;
 
-    public Pilha() {
-        this(100);
-    }
+    public static Serie[] lerDados(String[] entrada, int numEntrada) throws Exception {
+        Serie[] serie = new Serie[numEntrada];
+        String[] arquivo = new String[100];
 
-    public Pilha(int tamanho) {
-        array = new Serie[tamanho];
-        n = 0;
-    }
-
-    /*
-    * Insere uma Serie na última posicao da Pilha
-    * @param serie Serie a ser inserida
-    * @throws Exception se a pilha estiver cheia
-    */
-    public void empilhar(Serie series) throws Exception {
-        if(n >= array.length) {
-            throw new Exception("A pilha está totalmente cheia!");
+        for (int i = 0; i < numEntrada; i++) {
+            arquivo[i] = "/tmp/series/";
+            arquivo[i] += entrada[i];
         }
 
-        array[n] = series;
-        n++;
-    }
-
-    /*
-    * Remove uma Serie na última posicao da Pilha
-    * @return resp Serie a ser removida
-    * @throws Exception se a pilha estiver vazia
-    */
-    public Serie desempilhar() throws Exception {
-        if(n == 0) {
-            throw new Exception("A pilha está totalmente vazia!");
+        for (int i = 0; i < numEntrada; i++) {
+            serie[i] = new Serie();
+            serie[i].ler(arquivo[i]);
         }
-
-        return array[--n];
-    }
-
-    public void mostrar() {
-        for(int i = n - 1; i >= 0; i--) {
-            System.out.println(array[i]);
-        }
-    }
-}
-
-class Q06 {
-    static Serie[] removidos = new Serie[20];   // Series removidas da lista
-    static int r = 0;                           // contador removidos
-
-    public static Serie lerDados(String entrada) throws Exception {
-        Serie serie = new Serie(); 
-        String arquivo = "";
-
-        arquivo = "/tmp/series/";
-        arquivo += entrada; 
-
-        serie = new Serie();
-        serie.ler(arquivo);
 
         return serie;
     }
 
-    public static void printaRemovidos() {
-        for(int i = 0; i < r; i++) {
-            MyIO.println("(R) "+ removidos[i].getNome());
+    public static void swap(int i, int j, Serie[] array) {
+        Serie temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static void sort(int n, Serie[] series) {
+        quicksort(0, n - 1, series);
+    }
+
+    public static void quicksort(int esq, int dir, Serie[] series) {
+        int i = esq, j = dir;
+        Serie pivo = series[(dir + esq) / 2];
+
+        while(i <= j) {
+            while(series[i].getPaisOrigem().compareTo(pivo.getPaisOrigem()) < 0 || series[i].getPaisOrigem().compareTo(pivo.getPaisOrigem()) == 0 && series[i].getNome().compareTo(pivo.getNome()) < 0) {
+                i++;
+                comparacoes += 3;
+            }
+
+            while(series[j].getPaisOrigem().compareTo(pivo.getPaisOrigem()) > 0 || series[j].getPaisOrigem().compareTo(pivo.getPaisOrigem()) == 0 && series[j].getNome().compareTo(pivo.getNome()) > 0) {
+                j--;
+                comparacoes += 3;
+            }
+
+            if(i <= j) {
+                swap(i, j, series);
+                i++;
+                j--;
+            }
+        }
+
+        if(esq < j) {
+            quicksort(esq, j, series);
+        }
+
+        if(i < dir) {
+            quicksort(i, dir, series);
         }
     }
 
-    public static void addPilha(Pilha pilha, String[] entrada, int n) throws Exception {
-        for(int i = 0; i < n; i++) {
-            pilha.empilhar(lerDados(entrada[i]));
-        }
-    }
-
-    public static void tratarComando(String seriesEntrada, Pilha pilha) throws Exception {
-        if(seriesEntrada.charAt(0) == 'I') {
-            String[] aux = seriesEntrada.split(" ");
-            pilha.empilhar(lerDados(aux[1]));
-        } else if(seriesEntrada.charAt(0) == 'R') {
-            removidos[r] = pilha.desempilhar();
-            r++;
-        }
+    public static long now() {
+        return new Date().getTime();
     }
 
     public static boolean isFim(String s) {
@@ -306,11 +298,8 @@ class Q06 {
 
     public static void main(String[] args) throws Exception {
         MyIO.setCharset("UTF-8");
-
-        // Inicialização váriaveis
         String[] entrada = new String[1000];
         int numEntrada = 0;
-        int contador = 0;
 
         // Leitura da entrada padrao
         do {
@@ -318,21 +307,23 @@ class Q06 {
         } while (isFim(entrada[numEntrada++]) == false);
         numEntrada--; // Desconsiderar a palavra FIM
 
-        Pilha pilhaSeries = new Pilha();
-        addPilha(pilhaSeries, entrada, numEntrada);
-        
-        int quantidade = MyIO.readInt();
-        String[] seriesEntrada = new String[quantidade];
+        Serie[] series = lerDados(entrada, numEntrada);
 
-        // Ler as demais entradas
-        do {
-            seriesEntrada[contador] = MyIO.readLine();
-            tratarComando(seriesEntrada[contador], pilhaSeries);
-            contador++;
-        } while (contador < quantidade);
+        long inicio = now();
+        sort(numEntrada, series);
+        long fim = now();
 
-        printaRemovidos();
-        pilhaSeries.mostrar();
+        for (int i = 0; i < numEntrada; i++) {
+            System.out.println(series[i].toString());
+        }
+
+        double tempo = (fim - inicio) / 1000.0;
+
+        Arq.openWrite("matricula_quicksort.txt", "UTF-8");
+        Arq.print("Matricula : 742238 \t");
+        Arq.print("Tempo de execução : " + tempo + "s \t");
+        Arq.print("Numero de Comparaçoes : " + comparacoes);
+        Arq.close();
 
     }
 }

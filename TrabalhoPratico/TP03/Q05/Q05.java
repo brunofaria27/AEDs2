@@ -247,6 +247,63 @@ class Q05 {
         return serie;
     }
 
+    public static void swap(int i, int j, Serie[] array) {
+        Serie temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static void heapify(Serie[] series, int n, int i) {
+        int maior = i;
+        int esq = 2 * i ;
+        int dir = 2 * i + 1;
+
+        comparacoes++;
+        if (esq < n && (series[esq].getFormato().compareTo(series[maior].getFormato()) == 0)) {
+            comparacoes++;
+            if (series[esq].getNome().compareTo(series[maior].getNome()) > 0) {
+                maior = esq;
+            }
+        } else {
+            comparacoes++;
+            if (esq < n && series[esq].getFormato().compareTo(series[maior].getFormato()) > 0) {
+                maior = esq;
+            }
+        }
+
+        comparacoes++;
+        if (dir < n && series[dir].getFormato().compareTo(series[maior].getFormato()) == 0) {
+            comparacoes++;
+            if (series[dir].getNome().compareTo(series[maior].getNome()) > 0) {
+                maior = dir;
+            }
+        } else {
+            comparacoes++;
+            if (dir < n && series[dir].getFormato().compareTo(series[maior].getFormato()) > 0) {
+                maior = dir;
+            }
+        }
+
+        comparacoes++;
+        if(maior != i) {
+            swap(i, maior, series);
+            heapify(series, n, maior);
+        }
+    }
+
+    public static void sortByHeapSort(Serie[] series, int n) {
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            comparacoes++;
+            heapify(series, n, i);
+        }
+
+        for (int i = n - 1; i > 0; i--) {
+            comparacoes++;
+            swap(0, i, series);
+            heapify(series, i, 0);
+        }
+    }
+
     public static long now() {
         return new Date().getTime();
     }
@@ -268,9 +325,8 @@ class Q05 {
 
         Serie[] series = lerDados(entrada, numEntrada);
 
-        // Printar na tela e gravar no arquivo matricula_sequencial
         long inicio = now();
-        heapSort(numEntrada);
+        sortByHeapSort(series, numEntrada);
         long fim = now();
 
         for (int i = 0; i < numEntrada; i++) {

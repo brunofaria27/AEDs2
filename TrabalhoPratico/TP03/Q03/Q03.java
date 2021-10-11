@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.Arrays;
+import java.util.Collections;
 
 class Serie {
     private String nome;
@@ -240,13 +242,15 @@ class Q03 {
             Serie tmp = series[i];
             int j = i - 1;
 
-            while((j >= 0) && (series[j].getIdioma().compareTo(series[j].getIdioma()) > 0)) {
+            while((j >= 0) && (series[j].getIdioma().compareTo(tmp.getIdioma()) > 0) || (j >= 0) && (series[j].getIdioma().compareTo(tmp.getIdioma()) == 0) && series[j].getNome().compareTo(tmp.getNome()) > 0) {
                 comparacoes += 3;
                 series[j + 1] = series[j];
                 j--;
             }
+            
             series[j + 1] = tmp;
         }
+
     }
 
     public static long now(){

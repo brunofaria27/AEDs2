@@ -226,120 +226,126 @@ class Serie {
     }
 }
 
-class Celula {
-    public Serie elemento;
-    public Celula prox;
+class CCelula {
+    public Serie item;
+    public CCelula prox;
 
-    public Celula() {
-        this(null);
-    }
-
-    public Celula(Serie valorItem, Celula proxCelula) {
-        elemento = valorItem;
+    public CCelula(Serie valorItem, CCelula proxCelula) {
+        item = valorItem.Clone();
         prox = proxCelula;
     }
 
-    public Celula(Serie elemento) {
-        this.elemento = elemento;
-        this.prox = null;
+    public CCelula(Serie valorItem) {
+        item = valorItem.Clone();
+        prox = null;
     }
 
+    public CCelula() {
+        item = null;
+        prox = null;
+    }
 }
 
-class Lista {
-    private Celula primeiro;
-    private Celula ultimo;
+class CLista {
 
-    public Lista() {
-        primeiro = new Celula();
-        ultimo = primeiro;
-    }
+	private CCelula primeira;
+	private CCelula ultima;
+	private int qtde;
 
-    public void inserirInicio(Serie valorItem) {
-		Celula aux = primeiro.prox;
-		primeiro.prox = new Celula(valorItem, aux);
+	public CLista() {
+		primeira = new CCelula();
+		ultima = primeira;
+	}
+
+	public boolean vazia() {
+		return primeira == ultima;
+	}
+
+	public void inserirFim(Serie valorItem) {
+		ultima.prox = new CCelula(valorItem);
+		ultima = ultima.prox;
+		qtde++;
+	}
+
+	public void inserirInicio(Serie valorItem) {
+		CCelula aux = primeira.prox;
+		primeira.prox = new CCelula(valorItem, aux);
 		if (aux == null)
-			ultimo = primeiro.prox;
+			ultima = primeira.prox;
+		qtde++;
 	}
 
-    public void inserirFim(Serie valorItem) {
-		ultimo.prox = new Celula(valorItem);
-		ultimo = ultimo.prox;
-	}
+    public void inserir(Serie series, int pos) throws Exception {
+        int tamanho = quantidade();
 
-    public Serie removerInicio() throws Exception {
-        if (primeiro == ultimo) {
-            throw new Exception("Erro ao remover(vazia)");
-        }
-
-        Celula tmp = primeiro;
-        primeiro = primeiro.prox;
-        Serie resp = primeiro.elemento;
-        tmp.prox = null;
-        tmp = null;
-
-        return resp;
-    }
-
-    public Serie removerFim() throws Exception {
-        if (primeiro == ultimo) {
-            throw new Exception("Erro ao remover(vazia)");
-        }
-
-        Celula i;
-
-        for (i = primeiro; i.prox != ultimo; i = i.prox);
-
-        Serie resp = ultimo.elemento;
-        ultimo = i;
-        i = ultimo.prox = null;
-
-        return resp;
-    }
-
-    public void inserir(Serie jogador, int pos) throws Exception {
-        int tamanho = tamanho();
-
-        if (pos < 0 || pos > tamanho) {
-            throw new Exception("Erro ao inserir posicao (" + pos + " / tamanho = " + tamanho + ") invalida!");
-        } else if (pos == 0) {
-            inserirInicio(jogador);
-        } else if (pos == tamanho) {
-            inserirFim(jogador);
+        if(pos < 0 || pos > tamanho) {
+            throw new Exception("Erro ao inserir posicao ("+ pos +" / tamanho = "+ tamanho + ") invalida!");
+        } else if (pos == 0){
+            inserirInicio(series);
+        } else if(pos == tamanho) {
+            inserirFim(series);
         } else {
             // Caminhar ate a posicao anterior a insercao
-            Celula i = primeiro;
-            for (int j = 0; j < pos; j++, i = i.prox)
-                ;
+            CCelula i = primeira;
+            for(int j = 0; j < pos; j++, i = i.prox);
 
-            Celula tmp = new Celula(jogador);
+            CCelula tmp = new CCelula(series);
             tmp.prox = i.prox;
             i.prox = tmp;
             tmp = i = null;
-
         }
 
     }
 
+	public void mostrar() {
+		for (CCelula aux = primeira.prox; aux != null; aux = aux.prox)
+			System.out.println(aux.item);
+	}
+
+	public Serie removerInicio() {
+		if (primeira != ultima) {
+			CCelula aux = primeira.prox;
+			primeira.prox = aux.prox;
+			if (primeira.prox == null)
+				ultima = primeira;
+			qtde--;
+			return aux.item;
+		}
+		return null;
+	}
+
+	public Serie removerFim() {
+		if (primeira != ultima) {
+			CCelula aux = primeira;
+			while (aux.prox != ultima)
+				aux = aux.prox;
+			CCelula aux2 = aux.prox;
+			ultima = aux;
+			ultima.prox = null;
+			qtde--;
+			return aux2.item;
+		}
+		return null;
+	}
+
     public Serie remover(int pos) throws Exception {
         Serie resp;
-        int tamanho = tamanho();
+        int tamanho = quantidade();
 
-        if (primeiro == ultimo) {
+        if(primeira == ultima) {
             throw new Exception("Erro ao remover(vazia)");
-        } else if (pos < 0 || pos >= tamanho) {
-            throw new Exception("Erro ao remover (posicao " + pos + " /" + tamanho + ") invalida!");
-        } else if (pos == 0) {
+        } else if(pos < 0 || pos >= tamanho){
+            throw new Exception("Erro ao remover (posicao "+ pos +" /"+ tamanho + ") invalida!");
+        } else if(pos == 0){
             resp = removerInicio();
-        } else if (pos == tamanho - 1) {
+        } else if(pos == tamanho - 1) {
             resp = removerFim();
         } else {
-            Celula i = primeiro;
-            for (int j = 0; j < pos; j++, i = i.prox)
-                ;
+            CCelula i = primeira;
+            for(int j = 0; j < pos; j++, i = i.prox);
 
-            Celula tmp = i.prox;
-            resp = tmp.elemento;
+            CCelula tmp = i.prox;
+            resp = tmp.item;
             i.prox = tmp.prox;
             tmp.prox = null;
             i = tmp = null;
@@ -348,20 +354,9 @@ class Lista {
         return resp;
     }
 
-    public void mostrar() {
-		Celula aux = primeiro.prox;
-
-		while (aux != null) {
-			System.out.println(aux.elemento);
-			aux = aux.prox;
-		}
+	public int quantidade() {
+		return qtde;
 	}
-
-    public int tamanho() {
-        int tamanho = 0;
-        for (Celula i = primeiro; i != ultimo; i = i.prox, tamanho++);
-        return tamanho;
-    }
 
 }
 
@@ -388,7 +383,7 @@ class Q11 {
         }
     }
 
-    public static void tratarComando(String seriesEntrada, Lista listaDinamica) throws Exception {
+    public static void tratarComando(String seriesEntrada, CLista listaDinamica) throws Exception {
         String[] aux = new String[2];
 
         if (seriesEntrada.charAt(0) == 'I' && seriesEntrada.charAt(1) == 'I') {
@@ -422,7 +417,7 @@ class Q11 {
         MyIO.setCharset("UTF-8");
         // Inicialização Objetos
         Serie series = new Serie();
-        Lista listaDinamica = new Lista();
+        CLista listaDinamica = new CLista();
 
         // Inicialização váriaveis
         String[] entrada = new String[1000];

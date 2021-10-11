@@ -247,17 +247,20 @@ class Q08 {
         return serie;
     }
 
+    public static void swap(int i, int j, Serie[] array) {
+        Serie temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
     public static void bolha(Serie[] series, int n) {
-        Serie[] temp = new Serie[1];
         int i, j;
 
         for(i = (n - 1); i > 0; i--) {
             for(j = 0; j < i; j++) {
-                if(series[j].getNumeroTemporadas() > series[j + 1].getNumeroTemporadas()) {
+                if(series[j].getNumeroTemporadas() > series[j + 1].getNumeroTemporadas() || series[j].getNumeroTemporadas() == series[j + 1].getNumeroTemporadas() && series[j].getNome().compareTo(series[j + 1].getNome()) > 0) {
                     comparacoes += 3;
-                    temp[0] = series[j];
-                    series[j] = series[j + 1];
-                    series[j + 1] = temp[0];
+                    swap(j, j + 1, series);
                 }
             }
         }
