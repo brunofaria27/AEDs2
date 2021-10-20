@@ -1,1 +1,1 @@
-Matricula : 742238 	Tempo de execução : 0.001s 	Numero de Comparaçoes : 495
+Matricula : 742238 	Tempo de execução : 0.001s 	Numero de Comparaçoes : 1173

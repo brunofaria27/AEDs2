@@ -304,61 +304,59 @@ class CListaDup {
         return contador;
     }
 
-    public void trocarListaDupla(CCelulaDup serie1, CCelulaDup serie2) {
-        Serie serie = serie1.item;
-        serie1.item = serie2.item;
-        serie2.item = serie;
-    }
-
-    public void quickSort() {
-        quickSort(primeira.prox, ultima);
-    }
-
-    public void quickSort(CCelulaDup esq, CCelulaDup dir) {
-        Serie pivo = pegarPivo(esq, dir);
-        CCelulaDup i = esq;
-        CCelulaDup j = dir;
-
-        comparacoes++;
-        while (pegarPosicao(i) <= pegarPosicao(j)) {
-            comparacoes++;
-            while (i.item.getPaisOrigem().compareTo(pivo.getPaisOrigem()) < 0 || i.item.getPaisOrigem().compareTo(pivo.getPaisOrigem()) == 0 && i.item.getNome().compareTo(pivo.getNome()) < 0) {
-                i = i.prox;
-            }
-
-            comparacoes++;
-            while (j.item.getPaisOrigem().compareTo(pivo.getPaisOrigem()) > 0 || j.item.getPaisOrigem().compareTo(pivo.getPaisOrigem()) == 0 && j.item.getNome().compareTo(pivo.getNome()) > 0) {
-                j = j.ant;
-            }
-
-            comparacoes++;
-            if (pegarPosicao(i) <= pegarPosicao(j)) {
-                trocarListaDupla(i, j);
-                
-                i = i.prox;
-                j = j.ant;
-            }
-        }
-
-        comparacoes++;
-        if (pegarPosicao(esq) < pegarPosicao(j)) {
-            quickSort(esq, j);
-        }
-
-        comparacoes++;
-        if (pegarPosicao(i) < pegarPosicao(dir)) {
-            quickSort(i, dir);
-        }
-    }
-
-    public Serie pegarPivo(CCelulaDup esq, CCelulaDup dir) {
-        CCelulaDup i = new CCelulaDup();
-        i = primeira.prox;
-
-        int sum = pegarPosicao(esq) + pegarPosicao(dir);
-        for (int j = 0; j < sum/2; j++, i = i.prox);
-
+    public Serie getSeriePos(int pos) {
+        CCelulaDup i = primeira.prox;
+        for(int j = 0; j < pos; i = i.prox, j++);
         return i.item;
+    }
+
+    public CCelulaDup getCelulaPos(int pos) {
+        CCelulaDup i = primeira.prox;
+        for(int j = 0; j < pos; i = i.prox, j++);
+        return i;
+    }
+
+    public void swap(CCelulaDup i, CCelulaDup j) {
+        Serie tmp = i.item;
+        i.item = j.item;
+        j.item = tmp;
+    }
+
+    public void quicksort() {
+        int n = quantidade();
+        quicksortRec(0 , n - 1, getSeriePos((0 + (n - 1)) / 2) );
+    }
+
+    public void quicksortRec(int esq, int dir, Serie pivo) {
+        int i = esq;
+        int j = dir;
+
+        while(i <= j) {
+            while(getSeriePos(i).getPaisOrigem().compareTo(pivo.getPaisOrigem()) < 0 || (getSeriePos(i).getPaisOrigem().equals(pivo.getPaisOrigem()) && getSeriePos(i).getNome().compareTo(pivo.getNome()) < 0)) {
+                i++;
+                comparacoes += 3;
+            }
+
+            while(getSeriePos(j).getPaisOrigem().compareTo(pivo.getPaisOrigem()) > 0 || (getSeriePos(j).getPaisOrigem().equals(pivo.getPaisOrigem()) && getSeriePos(j).getNome().compareTo(pivo.getNome()) > 0)) {
+                j--;
+                comparacoes += 3;
+            }
+
+            if(i <= j) {
+                swap(getCelulaPos(i), getCelulaPos(j));
+                i++;
+                j--;
+            }
+        }
+
+        if(esq < j) {
+            quicksortRec(esq, j, getSeriePos((dir + esq) / 2));
+        }
+
+        if(i < dir) {
+            quicksortRec(i, dir, getSeriePos((dir + esq) / 2));
+        }
+
     }
 
     public int getComparacoes() {
@@ -407,7 +405,7 @@ class Q14 {
 
 
         long inicio = now();
-        listaDupla.quickSort();
+        listaDupla.quicksort();
         long fim = now();
 
         listaDupla.mostra();
