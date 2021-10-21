@@ -31,7 +31,21 @@ char *readline(char *line, int max_size) {
     return freadline(line, max_size, stdin);
 }
 
-void imprimir(Serie *serie) {
+void imprimir(Serie serie) {
+    printf("%s %s %s %s %s %s %s %d %d\n",
+        serie.nome,
+        serie.formato,
+        serie.duracao,
+        serie.pais,
+        serie.idioma,
+        serie.emissora,
+        serie.transmissao,
+        serie.num_temporadas,
+        serie.num_episodios
+    );
+}
+
+void imprimir2(Serie *serie) {
     printf("%s %s %s %s %s %s %s %d %d\n",
         serie->nome,
         serie->formato,
@@ -156,20 +170,18 @@ int isFim(char line[]) {
     return line[0] == 'F' && line[1] == 'I' && line[2] == 'M';
 }
 
-
 /* MAIN */
+
+Serie series[61];
+int i = 0;
 int comparacoes = 0;
 
-Serie lerDados(char s[]){
-    Serie series;
-
-    char *html = ler_html(s);
-    ler_serie(&series, html);
-
-    return series;
+void inserirFim(Serie serie) {
+    series[i] = clonar(&serie);
+    i++;
 }
 
-void sortBySelectionRecursive(Serie serie[], int n, int i) {
+void sortBySelectionRecursive(Serie series[], int n, int i) {
     if (i >= n - 1) {
         return;
     }
@@ -177,21 +189,22 @@ void sortBySelectionRecursive(Serie serie[], int n, int i) {
     int menor = i;
 
     for (int j = (i + 1); j < n; j++) {
-        if (strcmp(serie[menor].pais, serie[j].pais) > 0 || strcmp(serie[menor].pais, serie[j].pais) == 0 && strcmp(serie[menor].nome, serie[j].nome) > 0) {
+        if (strcmp(series[menor].pais, series[j].pais) > 0 || strcmp(series[menor].pais, series[j].pais) == 0 && strcmp(series[menor].nome, series[j].nome) > 0) {
             menor = j;
+            comparacoes++;
         }
     }
 
     Serie temp[1];
-    temp[0] = serie[i];
-    serie[i] = serie[menor];
-    serie[menor] = temp[0];
+    temp[0] = series[i];
+    series[i] = series[menor];
+    series[menor] = temp[0];
 
-    sortBySelectionRecursive(serie, n, i + 1);
+    sortBySelectionRecursive(series, n, i + 1);
 }
 
 int main() {
-    Serie *serie = (Serie*) malloc(61 * sizeof(Serie));
+    Serie serie;
     clock_t inicio, fim;
     size_t tam_prefixo = strlen(PREFIXO);
     char line[MAX_LINE_SIZE];
@@ -201,17 +214,20 @@ int main() {
     int numEntrada = 0;
 
     while (!isFim(line + tam_prefixo)) {
-        *serie = lerDados(line);
+        char *html = ler_html(line);
+        ler_serie(&serie, html);
+        inserirFim(serie);
+        free(html);
         readline(line + tam_prefixo, MAX_LINE_SIZE);
         numEntrada++;
     }
 
     inicio = clock();
-    sortBySelectionRecursive(serie, numEntrada, 0);
+    sortBySelectionRecursive(series, numEntrada, 0);
     fim = clock();
 
-    for (int i = 0; i < 100; i++) {
-        imprimir(&serie[i]);
+    for(int i = 0; i < 61; i++) {
+        imprimir(series[i]);
     }
 
     double tempo =  ((fim - inicio) / (double)CLOCKS_PER_SEC);
@@ -220,7 +236,7 @@ int main() {
     arq = fopen("matricula_selecaoRecursiva.txt","w");
 
     fprintf(arq, "Matricula : 742238 \t Tempo de execução : %fs\t Numero de Comparações : %i ", tempo, comparacoes);
-    fclose(arq); 
+    fclose(arq);
 
     return EXIT_SUCCESS;
 }
