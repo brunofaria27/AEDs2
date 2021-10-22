@@ -319,7 +319,7 @@ class Q06 {
 
         double tempo = (fim - inicio) / 1000.0;
 
-        Arq.openWrite("matricula_heapsort.txt", "UTF-8");
+        Arq.openWrite("matricula_quicksort.txt", "UTF-8");
         Arq.print("Matricula : 742238 \t");
         Arq.print("Tempo de execução : " + tempo + "s \t");
         Arq.print("Numero de Comparaçoes : " + comparacoes);

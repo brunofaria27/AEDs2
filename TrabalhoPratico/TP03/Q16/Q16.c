@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_FIELD_SIZE 100
 
@@ -44,6 +45,7 @@ void imprimir(Serie *serie) {
     );
 }
 
+// Retorna o tamanho em bytes de um arquivo.
 long tam_arquivo(FILE *file) {
     fseek(file, 0L, SEEK_END);
     long size = ftell(file);
@@ -51,6 +53,7 @@ long tam_arquivo(FILE *file) {
     return size;
 }
 
+// Retorna todo o conteúdo do arquivo numa string.
 char *ler_html(char filename[]) {
     FILE *file = fopen(filename, "r");
 
@@ -145,6 +148,18 @@ Serie clonar(Serie *serie) {
     return *serie;
 }
 
+void cloneEntrePonteiros(Serie *tmp, Serie *serie2) {
+    strcpy(tmp->nome, serie2->nome);
+    strcpy(tmp->formato, serie2->formato);
+    strcpy(tmp->duracao, serie2->duracao);
+    strcpy(tmp->pais, serie2->pais);
+    strcpy(tmp->idioma, serie2->idioma);
+    strcpy(tmp->emissora, serie2->emissora);
+    strcpy(tmp->transmissao, serie2->transmissao);
+    tmp->num_temporadas = serie2->num_temporadas;
+    tmp->num_episodios = serie2->num_episodios;
+}
+
 #define MAX_LINE_SIZE 250
 #define PREFIXO "/tmp/series/"
 // #define PREFIXO "../entrada e saida/tp02/series/"
@@ -153,71 +168,55 @@ int isFim(char line[]) {
     return line[0] == 'F' && line[1] == 'I' && line[2] == 'M';
 }
 
-// CELULA 
-typedef struct Celula {
-    Serie elemento; // Pode ter erro
-    struct Celula *prox;
-} Celula;
+/* CELULA INICIO */
+typedef struct CelulaDupla {
+    Serie elemento;
+    struct CelulaDupla *prox, *ant;
+} CelulaDupla;
 
-// Criar uma nova Celula
-Celula* new_celula(Serie *elemento){
-    Celula *temp = (Celula*)malloc(sizeof(Celula));
-    temp->elemento = *elemento; // Pode ter erro
+CelulaDupla* new_celula_dupla(Serie *elemento) {
+    CelulaDupla *temp = (CelulaDupla*)malloc(sizeof(CelulaDupla));
+
+    temp->elemento = *elemento;
     temp->prox = NULL;
+    temp->ant = NULL;
+
     return temp;
 }
-// FIM CELULA
+/* CELULA FIM */
 
-// CLASSE PILHA
-// Definindo a estrutura do tipo pilha flexivel
-typedef struct PilhaFlexivel {
-    struct Celula *topo;
+/* LISTA DUPLA INICIO */
+typedef struct ListaDupla {
+    struct CelulaDupla *primeiro, *ultimo;
     int size;
-} PilhaFlexivel;
+} ListaDupla;
 
-// Construtor para inicializar a pilha flexivel
-PilhaFlexivel* new_PilhaFlexivel(PilhaFlexivel *pilha) {
-    pilha->topo = NULL;
-    pilha->size = 0;
+ListaDupla* new_lista_dupla(ListaDupla *temp) {
+    Serie series;
+    temp->primeiro = new_celula_dupla(&series);
+    temp->ultimo = temp->primeiro;
+    temp->size = 0;
 
-    return pilha;
+    return temp;
 }
 
-// Metodo para retornar o tamanho da pilha flexivel
-int tamanhoPilha(PilhaFlexivel *pilha) {
-    return pilha->size;
+int tamanhoListaDupla(ListaDupla *temp) {
+    return temp->size;
 }
 
-// Inserir um elemento na pilha flexivel
-void inserirPilha(PilhaFlexivel *pilha, Serie *elemento) {
-    Celula *temp = new_celula(elemento);
-    temp->prox = pilha->topo;
-    pilha->topo = temp;
-    pilha->size++;
+void inserirFimDupla(ListaDupla *lista, Serie *elemento) {
+    Serie series;
+    series = clonar(elemento);
+    lista->ultimo->prox = new_celula_dupla(&series);
+    lista->ultimo->prox->ant = lista->ultimo;
+    lista->ultimo = lista->ultimo->prox;
+    lista->size++;
 }
 
-// Remover uma musica da pilha de musicas
-Serie removerPilha(PilhaFlexivel *pilha) {
-    // Verificar se a pilha esta vazia
-    if (pilha->topo == NULL) {
-        printf("\nA pilha esta vazia !!!\n");
-        exit(0);
-    }
+void mostrar(ListaDupla *lista) {
+    CelulaDupla *i;
 
-    Serie resp = pilha->topo->elemento;
-    Celula *temp = pilha->topo;
-    pilha->topo = pilha->topo->prox;
-    pilha->size--;
-    free(temp);
-
-    return resp;
-}
-
-void mostrarPilha(PilhaFlexivel *pilha) {
-    Celula *i;
-    int contador = 0;
-
-    for (i = pilha->topo; i != NULL; i = i->prox) {
+    for (i = lista->primeiro->prox; i != NULL; i = i->prox) {
         printf("%s %s %s %s %s %s %s %i %i\n", i->elemento.nome,
                                                i->elemento.formato,
                                                i->elemento.duracao,
@@ -227,13 +226,12 @@ void mostrarPilha(PilhaFlexivel *pilha) {
                                                i->elemento.transmissao,
                                                i->elemento.num_temporadas,
                                                i->elemento.num_episodios);
-        contador++;
     }
-}
-// FIM CLASSE PILHA
 
-Serie removidos[20]; // series removidos
-int r = 0; // contador removidos
+}
+/* LISTA DUPLA FIM */
+
+int comparacoes = 0;
 
 Serie lerDados(char s[]) {
     Serie series;
@@ -244,31 +242,88 @@ Serie lerDados(char s[]) {
     return series;
 }
 
-void printaRemovidos() {
-    for(int i = 0; i < r; i++){
-        printf("(R) %s\n", removidos[i].nome);
+Serie* pesquisarElementoListaDupla(ListaDupla *lista, int posicao) {
+    Serie *music = (Serie*) malloc(sizeof(Serie));
+
+    if (posicao < 0 || posicao > lista->size) {
+        printf("Erro !!! a posicao e menor que zero ou maior que o tamanho da lista\n");
+        printf("posicao (%d/ tamanho = %d) invalida\n", posicao, lista->size);
+    } else if (posicao == 0) {
+        comparacoes += 2;
+        music = &lista->primeiro->prox->elemento;
+        return music;
+    } else if (posicao == lista->size) {
+        comparacoes += 3;
+        music = &lista->ultimo->elemento;
+        return music;
+    } else {
+        comparacoes += 3;
+        CelulaDupla *ant = lista->primeiro;
+        for (int i = 0; i < posicao; i++) {
+            ant = ant->prox;
+        }
+
+        music = &ant->elemento;
+
+        return music;
     }
 }
 
-void trataEntradas(char s[], PilhaFlexivel *pilha){
-    char *aux[2];
-    char nomeArq[100] = {"/tmp/series/"};
-    Serie objector;
+//Metodo para trocar um elemento de posicao
+void trocarListaDupla(ListaDupla *lista, Serie *music1, Serie *music2) {
+    Serie *temp = (Serie*) malloc(sizeof(Serie));
 
-    if(s[0] == 'I'){
-        aux[0] = strtok(s, " "); 
-        aux[1] = strtok(NULL, " ");
-        strcat(nomeArq, aux[1]);
-        objector = lerDados(nomeArq);
-        inserirPilha(pilha, &objector);
-    } else {
-        removidos[r] = removerPilha(pilha);
-        r++;
+    cloneEntrePonteiros(temp, music1);
+    cloneEntrePonteiros(music1, music2);
+    cloneEntrePonteiros(music2, temp);
+}
+
+void sortByQuickSortDoublyList(ListaDupla *lista, int esq, int dir) {
+    Serie *pivo = pesquisarElementoListaDupla(lista, ((esq + dir) / 2));
+    int i = esq, j = dir;
+
+    while (i <= j) {
+        Serie *music1;
+        music1 = pesquisarElementoListaDupla(lista, i);
+
+        comparacoes++;
+        while (strcmp(music1->pais , pivo->pais) < 0 || (strcmp(music1->pais , pivo->pais) == 0 && strcmp(music1->nome , pivo->pais) < 0 )) {
+            i++;
+            music1 = pesquisarElementoListaDupla(lista, i);
+        }
+
+        Serie *music2;
+        music2 = pesquisarElementoListaDupla(lista, j);
+
+        comparacoes++;
+        while (strcmp(music2->pais , pivo->pais) > 0 || (strcmp(music2->pais , pivo->pais) == 0 && strcmp(music2->nome , pivo->pais) > 0 )) {
+            j--;
+            music2 = pesquisarElementoListaDupla(lista, j);
+        }
+
+        comparacoes++;
+        if (i <= j) {
+            trocarListaDupla(lista, music1, music2);
+            i++;
+            j--;
+        }
+
+        comparacoes++;
+        if (esq < j) {
+            sortByQuickSortDoublyList(lista, esq, j);
+        }
+
+        comparacoes++;
+        if (i < dir) {
+            sortByQuickSortDoublyList(lista, i, dir);
+        }
     }
+
 }
 
 int main() {
     Serie serie;
+    clock_t inicio, fim;
     size_t tam_prefixo = strlen(PREFIXO);
     char line[MAX_LINE_SIZE];
 
@@ -276,32 +331,33 @@ int main() {
     readline(line + tam_prefixo, MAX_LINE_SIZE);
     int numEntrada = 0;
 
-    PilhaFlexivel *pilhaflexivel;
-    pilhaflexivel = (PilhaFlexivel*)malloc(sizeof(PilhaFlexivel));
+    ListaDupla *listadupla;
+    listadupla = (ListaDupla*)malloc(sizeof(ListaDupla));
 
-    pilhaflexivel = new_PilhaFlexivel(pilhaflexivel);
+    listadupla = new_lista_dupla(listadupla);
 
     while (!isFim(line + tam_prefixo)) {
         char *html = ler_html(line);
         ler_serie(&serie, html);
-        inserirPilha(pilhaflexivel, &serie);
+        inserirFimDupla(listadupla, &serie);
         free(html);
         readline(line + tam_prefixo, MAX_LINE_SIZE);
         numEntrada++;
-        
     }
 
-    int n;
-    scanf("%i",&n);
-    char comandos[n][MAX_LINE_SIZE];
+    inicio = clock();
+    sortByQuickSortDoublyList(listadupla, 0, numEntrada - 1);
+    fim = clock();
 
-    for(int i=0; i<n; i++){
-        scanf(" %[^\n]s", comandos[i]); 
-        trataEntradas(comandos[i], pilhaflexivel);
-    }
+    mostrar(listadupla);
 
-    printaRemovidos();
-    mostrarPilha(pilhaflexivel);
+    double tempo =  ((fim - inicio) / (double)CLOCKS_PER_SEC) / 1000.0;
 
+    FILE *arq;
+    arq = fopen("matricula_quicksort2.txt","w");
+
+    fprintf(arq, "Matricula : 655537 \t Tempo de execução : %fs\t Numero de Comparações : %i ", tempo, comparacoes);
+    fclose(arq); 
+    
     return EXIT_SUCCESS;
 }

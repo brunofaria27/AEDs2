@@ -252,6 +252,30 @@ class Q10 {
         array[i] = array[j];
         array[j] = temp;
     }
+
+    public static void countingsort(int n, int exp, Serie[] series) {
+        Serie[] ordenado =  new Serie[n];
+        int i;
+        int[] count = new int[10];
+    
+        for(int x = 0; x < n; x++) {
+            count[(series[x].getNumeroEpisodios() * 1000 + series[x].getNumeroTemporadas() / exp) % 10]++;
+        }
+    
+        for(i = 1; i < 10; i++) {
+            count[i] += count[i-1];
+        }
+    
+        for(i = n - 1; i >= 0; i--) {
+            ordenado[count[(series[i].getNumeroEpisodios() * 1000 + series[i].getNumeroTemporadas() / exp) % 10] - 1] = series[i];
+            count[(series[i].getNumeroEpisodios() * 1000 + series[i].getNumeroTemporadas() / exp) % 10]--;
+            comparacoes++;
+        }
+    
+        for(int x = 0; x < n; x++) {
+            series[x] = ordenado[x];
+        }
+    }
     
     public static int maxValue(int n, Serie[] series) {
         int maxEp = series[0].getNumeroEpisodios();
@@ -276,7 +300,7 @@ class Q10 {
         int maior = maxValue(n, series);
     
         for(int exp = 1; maior / exp > 0; exp *= 10) {
-            countingsort(n,exp);
+            countingsort(n, exp, series);
         }
     
     }
@@ -304,7 +328,7 @@ class Q10 {
 
         // Printar na tela e gravar no arquivo matricula_sequencial
         long inicio = now();
-        sort(numEntrada, series);
+        radixsort(numEntrada, series);
         long fim = now();
 
         for (int i = 0; i < numEntrada; i++) {

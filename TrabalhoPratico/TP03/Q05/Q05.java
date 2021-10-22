@@ -291,7 +291,7 @@ class Q05 {
         }
     }
 
-    public static void sortByHeapSort(Serie[] series, int n) {
+    public static void HeapSort(Serie[] series, int n) {
         for (int i = n / 2 - 1; i >= 0; i--) {
             comparacoes++;
             heapify(series, n, i);
@@ -326,7 +326,7 @@ class Q05 {
         Serie[] series = lerDados(entrada, numEntrada);
 
         long inicio = now();
-        sortByHeapSort(series, numEntrada);
+        HeapSort(series, numEntrada);
         long fim = now();
 
         for (int i = 0; i < numEntrada; i++) {

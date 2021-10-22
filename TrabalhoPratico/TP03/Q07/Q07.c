@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_FIELD_SIZE 100
 
@@ -30,7 +31,21 @@ char *readline(char *line, int max_size) {
     return freadline(line, max_size, stdin);
 }
 
-void imprimir(Serie *serie) {
+void imprimir(Serie serie) {
+    printf("%s %s %s %s %s %s %s %d %d\n",
+        serie.nome,
+        serie.formato,
+        serie.duracao,
+        serie.pais,
+        serie.idioma,
+        serie.emissora,
+        serie.transmissao,
+        serie.num_temporadas,
+        serie.num_episodios
+    );
+}
+
+void imprimir2(Serie *serie) {
     printf("%s %s %s %s %s %s %s %d %d\n",
         serie->nome,
         serie->formato,
@@ -44,6 +59,7 @@ void imprimir(Serie *serie) {
     );
 }
 
+// Retorna o tamanho em bytes de um arquivo.
 long tam_arquivo(FILE *file) {
     fseek(file, 0L, SEEK_END);
     long size = ftell(file);
@@ -51,6 +67,7 @@ long tam_arquivo(FILE *file) {
     return size;
 }
 
+// Retorna todo o conteúdo do arquivo numa string.
 char *ler_html(char filename[]) {
     FILE *file = fopen(filename, "r");
 
@@ -153,122 +170,74 @@ int isFim(char line[]) {
     return line[0] == 'F' && line[1] == 'I' && line[2] == 'M';
 }
 
-// CELULA 
-typedef struct Celula {
-    Serie elemento; // Pode ter erro
-    struct Celula *prox;
-} Celula;
+/* MAIN */
 
-// Criar uma nova Celula
-Celula* new_celula(Serie *elemento){
-    Celula *temp = (Celula*)malloc(sizeof(Celula));
-    temp->elemento = *elemento; // Pode ter erro
-    temp->prox = NULL;
-    return temp;
-}
-// FIM CELULA
+Serie series[61];
+int tam = 0;
+int comparacoes = 0;
 
-// CLASSE PILHA
-// Definindo a estrutura do tipo pilha flexivel
-typedef struct PilhaFlexivel {
-    struct Celula *topo;
-    int size;
-} PilhaFlexivel;
-
-// Construtor para inicializar a pilha flexivel
-PilhaFlexivel* new_PilhaFlexivel(PilhaFlexivel *pilha) {
-    pilha->topo = NULL;
-    pilha->size = 0;
-
-    return pilha;
+void inserirFim(Serie serie) {
+    series[tam] = clonar(&serie);
+    tam++;
 }
 
-// Metodo para retornar o tamanho da pilha flexivel
-int tamanhoPilha(PilhaFlexivel *pilha) {
-    return pilha->size;
+int getMaior(int n) {
+    int maior = series[0].num_temporadas;
+
+    for (int i = 0; i < n; i++) {
+        if(maior < series[i].num_temporadas){
+            maior = series[i].num_temporadas;
+        }
+    }
+    
+    return maior;
 }
 
-// Inserir um elemento na pilha flexivel
-void inserirPilha(PilhaFlexivel *pilha, Serie *elemento) {
-    Celula *temp = new_celula(elemento);
-    temp->prox = pilha->topo;
-    pilha->topo = temp;
-    pilha->size++;
-}
+void countingSort(int n) {
+    int tamCount = (getMaior(n) + 1);
+    int count[tamCount];
+    Serie ordenado[n];
 
-// Remover uma musica da pilha de musicas
-Serie removerPilha(PilhaFlexivel *pilha) {
-    // Verificar se a pilha esta vazia
-    if (pilha->topo == NULL) {
-        printf("\nA pilha esta vazia !!!\n");
-        exit(0);
+    for (int i = 0; i < tamCount; i++) {
+        count[i] = 0;
     }
 
-    Serie resp = pilha->topo->elemento;
-    Celula *temp = pilha->topo;
-    pilha->topo = pilha->topo->prox;
-    pilha->size--;
-    free(temp);
-
-    return resp;
-}
-
-void mostrarPilha(PilhaFlexivel *pilha) {
-    Celula *i;
-    int contador = 0;
-
-    for (i = pilha->topo; i != NULL; i = i->prox) {
-        printf("%s %s %s %s %s %s %s %i %i\n", i->elemento.nome,
-                                               i->elemento.formato,
-                                               i->elemento.duracao,
-                                               i->elemento.pais,
-                                               i->elemento.idioma,
-                                               i->elemento.emissora,
-                                               i->elemento.transmissao,
-                                               i->elemento.num_temporadas,
-                                               i->elemento.num_episodios);
-        contador++;
+    for (int i = 0; i < n; i++) {
+        count[series[i].num_temporadas]++;
     }
-}
-// FIM CLASSE PILHA
 
-Serie removidos[20]; // series removidos
-int r = 0; // contador removidos
-
-Serie lerDados(char s[]) {
-    Serie series;
-
-    char *html = ler_html(s);
-    ler_serie(&series, html);
-
-    return series;
-}
-
-void printaRemovidos() {
-    for(int i = 0; i < r; i++){
-        printf("(R) %s\n", removidos[i].nome);
+    for(int i = 1; i < tamCount; i++) {
+        count[i] += count[i - 1];
     }
-}
 
-void trataEntradas(char s[], PilhaFlexivel *pilha){
-    char *aux[2];
-    char nomeArq[100] = {"/tmp/series/"};
-    Serie objector;
-
-    if(s[0] == 'I'){
-        aux[0] = strtok(s, " "); 
-        aux[1] = strtok(NULL, " ");
-        strcat(nomeArq, aux[1]);
-        objector = lerDados(nomeArq);
-        inserirPilha(pilha, &objector);
-    } else {
-        removidos[r] = removerPilha(pilha);
-        r++;
+    
+    for(int i = n - 1; i >= 0; i--) { 
+        ordenado[count[series[i].num_temporadas] - 1] = series[i];
+        count[series[i].num_temporadas]--;
+        comparacoes++;
     }
+
+    for(int i = 1; i < n; i++) {  
+        Serie tmp = ordenado[i];
+        int j = i - 1;
+        
+        while((j >= 0) && ordenado[j].num_temporadas == tmp.num_temporadas && strcmp(ordenado[j].nome, tmp.nome) > 0) {
+            ordenado[j + 1] = ordenado[j];
+            j--;
+        }
+
+        ordenado[j + 1] = tmp;
+    }
+
+    for(int i = 0 ; i < n; i++) {
+        series[i] = ordenado[i];
+    }
+
 }
 
 int main() {
     Serie serie;
+    clock_t inicio, fim;
     size_t tam_prefixo = strlen(PREFIXO);
     char line[MAX_LINE_SIZE];
 
@@ -276,32 +245,30 @@ int main() {
     readline(line + tam_prefixo, MAX_LINE_SIZE);
     int numEntrada = 0;
 
-    PilhaFlexivel *pilhaflexivel;
-    pilhaflexivel = (PilhaFlexivel*)malloc(sizeof(PilhaFlexivel));
-
-    pilhaflexivel = new_PilhaFlexivel(pilhaflexivel);
-
     while (!isFim(line + tam_prefixo)) {
         char *html = ler_html(line);
         ler_serie(&serie, html);
-        inserirPilha(pilhaflexivel, &serie);
+        inserirFim(serie);
         free(html);
         readline(line + tam_prefixo, MAX_LINE_SIZE);
         numEntrada++;
-        
     }
 
-    int n;
-    scanf("%i",&n);
-    char comandos[n][MAX_LINE_SIZE];
+    inicio = clock();
+    countingSort(numEntrada);
+    fim = clock();
 
-    for(int i=0; i<n; i++){
-        scanf(" %[^\n]s", comandos[i]); 
-        trataEntradas(comandos[i], pilhaflexivel);
+    for(int i = 0; i < 61; i++) {
+        imprimir(series[i]);
     }
 
-    printaRemovidos();
-    mostrarPilha(pilhaflexivel);
+    double tempo =  ((fim - inicio) / (double)CLOCKS_PER_SEC);
+
+    FILE *arq;
+    arq = fopen("matricula_countingsort.txt","w");
+
+    fprintf(arq, "Matricula : 742238 \t Tempo de execução : %fs\t Numero de Comparações : %i ", tempo, comparacoes);
+    fclose(arq);
 
     return EXIT_SUCCESS;
 }
