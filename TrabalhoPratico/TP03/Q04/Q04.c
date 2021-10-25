@@ -182,7 +182,7 @@ void inserirFim(Serie serie) {
 }
 
 void insercaoPorCor(int n, int cor, int h) {
-    for (int x = (h + cor); x < n; x+=h) {
+    for (int x = (h + cor); x < n; x += h) {
         Serie tmp = series[i];
         int j = x - h;
         while ((j >= 0) && (strcmp(series[j].idioma, tmp.idioma) > 0) || (strcmp(series[j].idioma, tmp.idioma) == 0) && (strcmp(series[j].nome, tmp.nome) > 0)) {

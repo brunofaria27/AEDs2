@@ -2,8 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
-import java.util.Arrays;
-import java.util.Collections;
 
 class Serie {
     private String nome;
@@ -217,9 +215,59 @@ class Serie {
     }
 }
 
-class Q03 {
-    static int comparacoes = 0;
+class Lista {
+    private Serie[] array;
+    private int n;
+    public int comparacoes = 0;
 
+    public Lista() {
+        this(61);
+    }
+
+    public Lista(int tamanho) {
+        array = new Serie[tamanho];
+        n = 0;
+    }
+
+    public int getTamanhoArray() {
+        return this.array.length;
+    }
+
+    // Métodos importantes
+    public void inserirFim(Serie serie) throws Exception {
+        if(n >= array.length) {
+            throw new Exception("Erro ao inserir objeto!");
+        }
+
+        array[n] = serie.Clone();
+        n++;
+    }
+
+    public void insertionSort(Lista series, int numEntrada) {
+        for (int i = 1; i < numEntrada; i++) {
+            Serie tmp = series.array[i];
+            int j = i - 1;
+
+            while((j >= 0) && (series.array[j].getIdioma().compareTo(tmp.getIdioma()) > 0) || (j >= 0) && (series.array[j].getIdioma().compareTo(tmp.getIdioma()) == 0) && series.array[j].getNome().compareTo(tmp.getNome()) > 0) {
+                comparacoes += 3;
+                series.array[j + 1] = series.array[j];
+                j--;
+            }
+            
+            series.array[j + 1] = tmp;
+        }
+
+    }
+
+    public void mostrar() {
+        for(int i = 0; i < n; i++) {
+            System.out.println(array[i]);
+        }
+    }
+    
+}
+
+class Q03 {
     public static Serie[] lerDados(String[] entrada, int numEntrada) throws Exception {
         Serie[] serie = new Serie[numEntrada]; 
         String[] arquivo = new String[100];
@@ -237,23 +285,7 @@ class Q03 {
        return serie;
     }
 
-    public static void insertionSort(Serie[] series, int numEntrada) {
-        for (int i = 1; i < numEntrada; i++) {
-            Serie tmp = series[i];
-            int j = i - 1;
-
-            while((j >= 0) && (series[j].getIdioma().compareTo(tmp.getIdioma()) > 0) || (j >= 0) && (series[j].getIdioma().compareTo(tmp.getIdioma()) == 0) && series[j].getNome().compareTo(tmp.getNome()) > 0) {
-                comparacoes += 3;
-                series[j + 1] = series[j];
-                j--;
-            }
-            
-            series[j + 1] = tmp;
-        }
-
-    }
-
-    public static long now(){
+    public static long now() {
         return new Date().getTime();
     }  
 
@@ -263,6 +295,8 @@ class Q03 {
 
     public static void main(String[] args) throws Exception {
         MyIO.setCharset("UTF-8");
+        Lista lista = new Lista();
+
         String[] entrada = new String[1000];
         int numEntrada = 0;
 
@@ -274,21 +308,22 @@ class Q03 {
 
         Serie[] series = lerDados(entrada, numEntrada);
 
-        // Printar na tela e gravar no arquivo matricula_sequencial
+        for(int i = 0; i < numEntrada; i++){
+            lista.inserirFim(series[i]);
+        }
+
         long inicio = now();
-        insertionSort(series, numEntrada);
+        lista.insertionSort(lista, numEntrada);
         long fim = now();
 
-        for(int i = 0; i < numEntrada; i++){
-            System.out.println(series[i].toString());
-        }
+        lista.mostrar();
 
         double tempo = (fim - inicio)/1000.0;
 
         Arq.openWrite("matricula_insercao.txt", "UTF-8");
         Arq.print("Matricula : 742238 \t");
         Arq.print("Tempo de execução : " + tempo + "s \t");
-        Arq.print("Numero de Comparaçoes : " + comparacoes);
+        Arq.print("Numero de Comparaçoes : " + lista.comparacoes);
         Arq.close();
 
     }

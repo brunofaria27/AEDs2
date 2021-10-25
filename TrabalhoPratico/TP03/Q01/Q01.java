@@ -215,9 +215,64 @@ class Serie {
     }
 }
 
-class Q01 {
-    static int comparacoes = 0;
+class Lista {
+    private Serie[] array;
+    private int n;
+    public int comparacoes = 0;
 
+    public Lista() {
+        this(61);
+    }
+
+    public Lista(int tamanho) {
+        array = new Serie[tamanho];
+        n = 0;
+    }
+
+    public int getTamanhoArray() {
+        return this.array.length;
+    }
+
+    // Métodos importantes
+    public void inserirFim(Serie serie) throws Exception {
+        if(n >= array.length) {
+            throw new Exception("Erro ao inserir objeto!");
+        }
+
+        array[n] = serie.Clone();
+        n++;
+    }
+
+    public void swap(int i, int j, Lista series) {
+        Serie temp = series.array[i];
+        series.array[i] = series.array[j];
+        series.array[j] = temp;
+    }
+
+    public void selectionSort(Lista series, int numentrada) {
+
+        for (int i = 0; i < (numentrada - 1); i++) {
+           int menor = i;
+           for(int j = (i + 1); j < numentrada; j++) {
+               comparacoes++;
+              if(series.array[menor].getPaisOrigem().compareTo(series.array[j].getPaisOrigem()) > 0 || series.array[menor].getPaisOrigem().compareTo(series.array[j].getPaisOrigem()) == 0 && series.array[menor].getNome().compareTo(series.array[j].getNome()) > 0) {
+                menor = j;
+              }
+           }
+           swap(menor, i, series);
+        }
+
+    }
+
+    public void mostrar() {
+        for(int i = 0; i < n; i++) {
+            System.out.println(array[i]);
+        }
+    }
+    
+}
+
+class Q01 {
     public static Serie[] lerDados(String[] entrada, int numEntrada) throws Exception {
         Serie[] serie = new Serie[numEntrada]; 
         String[] arquivo = new String[100];
@@ -235,27 +290,6 @@ class Q01 {
        return serie;
     }
 
-    public static void swap(int i, int j, Serie[] array) {
-        Serie temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-
-    public static void selectionSort(Serie[] series, int numentrada) {
-
-        for (int i = 0; i < (numentrada - 1); i++) {
-           int menor = i;
-           for(int j = (i + 1); j < numentrada; j++) {
-               comparacoes++;
-              if(series[menor].getPaisOrigem().compareTo(series[j].getPaisOrigem()) > 0 || series[menor].getPaisOrigem().compareTo(series[j].getPaisOrigem()) == 0 && series[menor].getNome().compareTo(series[j].getNome()) > 0) {
-                menor = j;
-              }
-           }
-           swap(menor, i, series);
-        }
-
-    }
-
     public static long now() {
         return new Date().getTime();
     }  
@@ -266,6 +300,8 @@ class Q01 {
 
     public static void main(String[] args) throws Exception {
         MyIO.setCharset("UTF-8");
+        Lista lista = new Lista();
+
         String[] entrada = new String[1000];
         int numEntrada = 0;
 
@@ -277,20 +313,22 @@ class Q01 {
 
         Serie[] series = lerDados(entrada, numEntrada);
 
-        long inicio = now();
-        selectionSort(series, numEntrada);
-        long fim = now();
-
         for(int i = 0; i < numEntrada; i++){
-            System.out.println(series[i].toString());
+            lista.inserirFim(series[i]);
         }
 
+        long inicio = now();
+        lista.selectionSort(lista, numEntrada);
+        long fim = now();
+
         double tempo = (fim - inicio)/1000.0;
+
+        lista.mostrar();
 
         Arq.openWrite("matricula_selecao.txt", "UTF-8");
         Arq.print("Matricula : 742238 \t");
         Arq.print("Tempo de execução : " + tempo + "s \t");
-        Arq.print("Numero de Comparaçoes : " + comparacoes);
+        Arq.print("Numero de Comparaçoes : " + lista.comparacoes);
         Arq.close();
 
     }

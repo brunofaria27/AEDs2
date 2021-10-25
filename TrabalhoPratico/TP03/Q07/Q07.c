@@ -224,6 +224,7 @@ void countingSort(int n) {
         while((j >= 0) && ordenado[j].num_temporadas == tmp.num_temporadas && strcmp(ordenado[j].nome, tmp.nome) > 0) {
             ordenado[j + 1] = ordenado[j];
             j--;
+            comparacoes += 2;
         }
 
         ordenado[j + 1] = tmp;
