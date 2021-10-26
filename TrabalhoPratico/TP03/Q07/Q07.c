@@ -171,9 +171,8 @@ int isFim(char line[]) {
 }
 
 /* MAIN */
-
-Serie series[61];
 int tam = 0;
+Serie series[tam];
 int comparacoes = 0;
 
 void inserirFim(Serie serie) {
@@ -185,7 +184,7 @@ int getMaior(int n) {
     int maior = series[0].num_temporadas;
 
     for (int i = 0; i < n; i++) {
-        if(maior < series[i].num_temporadas){
+        if(maior < series[i].num_temporadas) {
             maior = series[i].num_temporadas;
         }
     }
