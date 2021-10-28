@@ -172,7 +172,7 @@ int isFim(char line[]) {
 
 /* MAIN */
 int tam = 0;
-Serie series[tam];
+Serie series[61];
 int comparacoes = 0;
 
 void inserirFim(Serie serie) {
@@ -258,7 +258,7 @@ int main() {
     countingSort(numEntrada);
     fim = clock();
 
-    for(int i = 0; i < 61; i++) {
+    for(int i = 0; i < numEntrada; i++) {
         imprimir(series[i]);
     }
 

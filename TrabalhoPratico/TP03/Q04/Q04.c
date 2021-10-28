@@ -171,40 +171,37 @@ int isFim(char line[]) {
 }
 
 /* MAIN */
-
+int tam = 0;
 Serie series[61];
-int i = 0;
 int comparacoes = 0;
 
 void inserirFim(Serie serie) {
-    series[i] = clonar(&serie);
-    i++;
+    series[tam] = clonar(&serie);
+    tam++;
 }
 
-void insercaoPorCor(int n, int cor, int h) {
-    for (int x = (h + cor); x < n; x += h) {
-        Serie tmp = series[i];
-        int j = x - h;
-        while ((j >= 0) && (strcmp(series[j].idioma, tmp.idioma) > 0) || (strcmp(series[j].idioma, tmp.idioma) == 0) && (strcmp(series[j].nome, tmp.nome) > 0)) {
-            series[j + h] = series[j];
-            j-=h;
-        }
-        series[j + h] = tmp;
+void shellSort(int n){
+    int i = (n - 1) / 2;
+    int chave, k;
+    Serie aux;
+
+    while(i != 0) {
+        do {
+            chave = 1;
+            for(k = 0; k < n - i; ++k) {
+                if((strcmp(series[k].idioma, series[k + i].idioma) > 0) || (strcmp(series[k].idioma, series[k + i].idioma) == 0) && (strcmp(series[k].nome, series[k + i].nome) > 0)) {
+                    aux = series[k];
+                    series[k] = series[k + i];
+                    series[k + i] = aux;
+                    chave = 0;
+                    comparacoes += 3;
+                }
+            }
+        } while (chave == 0);
+     i = i / 2;
     }
 }
 
-void shellsort(int n) {
-    int h = 1;
-
-    do { h = (h * 3) + 1; } while (h < n);
-
-    do {
-        h /= 3;
-        for(int cor = 0; cor < h; cor++){
-            insercaoPorCor(n, cor, h);
-        }
-    } while (h != 1);
-}
 
 int main() {
     Serie serie;
@@ -226,18 +223,17 @@ int main() {
     }
 
     inicio = clock();
-    shellsort(numEntrada);
+    shellSort(numEntrada);
     fim = clock();
 
-    for(int x = 0; x < 61; x++) {
-        imprimir(series[x]);
+    for(int i = 0; i < numEntrada; i++) {
+        imprimir(series[i]);
     }
 
     double tempo =  ((fim - inicio) / (double)CLOCKS_PER_SEC);
 
     FILE *arq;
     arq = fopen("matricula_shellsort.txt","w");
-
     fprintf(arq, "Matricula : 742238 \t Tempo de execução : %fs\t Numero de Comparações : %i ", tempo, comparacoes);
     fclose(arq);
 

@@ -148,18 +148,6 @@ Serie clonar(Serie *serie) {
     return *serie;
 }
 
-void cloneEntrePonteiros(Serie *tmp, Serie *serie2) {
-    strcpy(tmp->nome, serie2->nome);
-    strcpy(tmp->formato, serie2->formato);
-    strcpy(tmp->duracao, serie2->duracao);
-    strcpy(tmp->pais, serie2->pais);
-    strcpy(tmp->idioma, serie2->idioma);
-    strcpy(tmp->emissora, serie2->emissora);
-    strcpy(tmp->transmissao, serie2->transmissao);
-    tmp->num_temporadas = serie2->num_temporadas;
-    tmp->num_episodios = serie2->num_episodios;
-}
-
 #define MAX_LINE_SIZE 250
 #define PREFIXO "/tmp/series/"
 // #define PREFIXO "../entrada e saida/tp02/series/"
@@ -242,85 +230,6 @@ Serie lerDados(char s[]) {
     return series;
 }
 
-Serie* pesquisarElementoListaDupla(ListaDupla *lista, int posicao) {
-    Serie *music = (Serie*) malloc(sizeof(Serie));
-
-    if (posicao < 0 || posicao > lista->size) {
-        printf("Erro !!! a posicao e menor que zero ou maior que o tamanho da lista\n");
-        printf("posicao (%d/ tamanho = %d) invalida\n", posicao, lista->size);
-    } else if (posicao == 0) {
-        comparacoes += 2;
-        music = &lista->primeiro->prox->elemento;
-        return music;
-    } else if (posicao == lista->size) {
-        comparacoes += 3;
-        music = &lista->ultimo->elemento;
-        return music;
-    } else {
-        comparacoes += 3;
-        CelulaDupla *ant = lista->primeiro;
-        for (int i = 0; i < posicao; i++) {
-            ant = ant->prox;
-        }
-
-        music = &ant->elemento;
-
-        return music;
-    }
-}
-
-//Metodo para trocar um elemento de posicao
-void trocarListaDupla(ListaDupla *lista, Serie *music1, Serie *music2) {
-    Serie *temp = (Serie*) malloc(sizeof(Serie));
-
-    cloneEntrePonteiros(temp, music1);
-    cloneEntrePonteiros(music1, music2);
-    cloneEntrePonteiros(music2, temp);
-}
-
-void sortByQuickSortDoublyList(ListaDupla *lista, int esq, int dir) {
-    Serie *pivo = pesquisarElementoListaDupla(lista, ((esq + dir) / 2));
-    int i = esq, j = dir;
-
-    while (i <= j) {
-        Serie *music1;
-        music1 = pesquisarElementoListaDupla(lista, i);
-
-        comparacoes++;
-        while (strcmp(music1->pais , pivo->pais) < 0 || (strcmp(music1->pais , pivo->pais) == 0 && strcmp(music1->nome , pivo->pais) < 0 )) {
-            i++;
-            music1 = pesquisarElementoListaDupla(lista, i);
-        }
-
-        Serie *music2;
-        music2 = pesquisarElementoListaDupla(lista, j);
-
-        comparacoes++;
-        while (strcmp(music2->pais , pivo->pais) > 0 || (strcmp(music2->pais , pivo->pais) == 0 && strcmp(music2->nome , pivo->pais) > 0 )) {
-            j--;
-            music2 = pesquisarElementoListaDupla(lista, j);
-        }
-
-        comparacoes++;
-        if (i <= j) {
-            trocarListaDupla(lista, music1, music2);
-            i++;
-            j--;
-        }
-
-        comparacoes++;
-        if (esq < j) {
-            sortByQuickSortDoublyList(lista, esq, j);
-        }
-
-        comparacoes++;
-        if (i < dir) {
-            sortByQuickSortDoublyList(lista, i, dir);
-        }
-    }
-
-}
-
 int main() {
     Serie serie;
     clock_t inicio, fim;
@@ -346,7 +255,7 @@ int main() {
     }
 
     inicio = clock();
-    sortByQuickSortDoublyList(listadupla, 0, numEntrada - 1);
+    quickSortDoublyList(listadupla, 0, numEntrada - 1);
     fim = clock();
 
     mostrar(listadupla);

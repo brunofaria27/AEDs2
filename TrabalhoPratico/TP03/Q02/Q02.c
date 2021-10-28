@@ -171,17 +171,16 @@ int isFim(char line[]) {
 }
 
 /* MAIN */
-
+int tam = 0;
 Serie series[61];
-int i = 0;
 int comparacoes = 0;
 
 void inserirFim(Serie serie) {
-    series[i] = clonar(&serie);
-    i++;
+    series[tam] = clonar(&serie);
+    tam++;
 }
 
-void sortBySelectionRecursive(Serie series[], int n, int i) {
+void selectionRecursive(int n, int i) {
     if (i >= n - 1) {
         return;
     }
@@ -200,7 +199,7 @@ void sortBySelectionRecursive(Serie series[], int n, int i) {
     series[i] = series[menor];
     series[menor] = temp[0];
 
-    sortBySelectionRecursive(series, n, i + 1);
+    selectionRecursive(n, i + 1);
 }
 
 int main() {
@@ -223,10 +222,10 @@ int main() {
     }
 
     inicio = clock();
-    sortBySelectionRecursive(series, numEntrada, 0);
+    selectionRecursive(numEntrada, 0);
     fim = clock();
 
-    for(int i = 0; i < 61; i++) {
+    for(int i = 0; i < numEntrada; i++) {
         imprimir(series[i]);
     }
 

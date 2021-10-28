@@ -1,0 +1,1 @@
+Matricula : 742238 	 Tempo de execução : 0.000000s	 Numero de Comparações : 146 
