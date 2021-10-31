@@ -4,6 +4,7 @@
 #include <time.h>
 
 #define MAX_FIELD_SIZE 100
+int comparacoes = 0;
 
 typedef struct {
     char nome[MAX_FIELD_SIZE];
@@ -201,6 +202,57 @@ void inserirFimDupla(ListaDupla *lista, Serie *elemento) {
     lista->size++;
 }
 
+Serie* getJogadorPos(int pos) {
+    ListaDupla *temp = temp->primeiro->prox;
+    CelulaDupla *i = temp;
+    for(int j=0; j < pos ; j++,i = i->prox);
+    return i->elemento;
+}
+
+CelulaDupla* getCelulaPos(int pos){
+    ListaDupla *temp = temp->primeiro->prox;
+    CelulaDupla *i = temp;
+    for(int j=0; j < pos ; j++,i = i->prox);
+    return i;
+}
+
+void swap(CelulaDupla *i, CelulaDupla *j){
+    Serie tmp = i->elemento;
+    i->elemento = j->elemento;
+    j->elemento = tmp;
+}   
+
+void quicksortRec(int esq, int dir, Serie* pivo) {
+    int i = esq, j = dir; 
+
+    while (i <= j) {
+
+        while (strcmp(getJogadorPos(i)->pais , pivo->pais) < 0 || (strcmp(getJogadorPos(i)->pais , pivo->pais) == 0 && strcmp(getJogadorPos(i)->nome , pivo->pais) < 0)){
+            ++i;
+            comparacoes+=3;
+        }
+
+        while (strcmp(getJogadorPos(j)->pais , pivo->pais) < 0 || (strcmp(getJogadorPos(j)->pais , pivo->pais) == 0 && strcmp(getJogadorPos(j)->nome , pivo->pais) < 0)){ 
+            --j;
+            comparacoes+=3;
+        }
+
+        if (i <= j) {
+            swap(getCelulaPos(i),getCelulaPos(j));
+            ++i;
+            --j;
+        }
+    }
+
+    if (esq < j)quicksortRec( esq, j, getJogadorPos( (dir+esq)/2 ) );
+    if (i < dir)quicksortRec( i, dir, getJogadorPos( (dir+esq)/2 ) );
+}
+
+void quicksort() {
+    int n = tamanho();
+    quicksortRec( 0, n-1, getJogadorPos( 0+(n+1)/2 ) );
+}
+
 void mostrar(ListaDupla *lista) {
     CelulaDupla *i;
 
@@ -218,8 +270,6 @@ void mostrar(ListaDupla *lista) {
 
 }
 /* LISTA DUPLA FIM */
-
-int comparacoes = 0;
 
 Serie lerDados(char s[]) {
     Serie series;
@@ -255,7 +305,7 @@ int main() {
     }
 
     inicio = clock();
-    quickSortDoublyList(listadupla, 0, numEntrada - 1);
+    quicksort(listadupla, 0, numEntrada - 1);
     fim = clock();
 
     mostrar(listadupla);
