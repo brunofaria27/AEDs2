@@ -18,6 +18,22 @@ typedef struct {
     int num_episodios;
 } Serie;
 
+Serie novaStructSerie() {
+    Serie series;
+
+    strcpy(series.duracao, "");
+    strcpy(series.emissora, "");
+    strcpy(series.nome, "");
+    strcpy(series.formato, "");
+    strcpy(series.pais, "");
+    strcpy(series.idioma, "");
+    strcpy(series.transmissao, "");
+    series.num_episodios = 0;
+    series.num_temporadas = 0;
+
+    return series;
+}
+
 char *remove_line_break(char *line) {
     while (*line != '\r' && *line != '\n') line++;
     *line = '\0';
@@ -145,8 +161,21 @@ void ler_serie(Serie *serie, char *html) {
     sscanf(extrair_texto(ptr, texto), "%d", &serie->num_episodios);
 }
 
-Serie clonar(Serie *serie) {
-    return *serie;
+Serie* clonar(Serie s){
+    Serie *clone = (Serie*) malloc(sizeof(Serie));
+
+    strcpy(clone->duracao, s.duracao);
+    strcpy(clone->emissora, s.emissora);
+    strcpy(clone->nome, s.nome);
+    strcpy(clone->formato, s.formato);
+    strcpy(clone->pais, s.pais);
+    strcpy(clone->idioma, s.idioma);
+    strcpy(clone->transmissao, s.transmissao);
+
+    clone->num_episodios = s.num_episodios;
+    clone->num_temporadas = s.num_temporadas;
+
+    return clone;
 }
 
 #define MAX_LINE_SIZE 250
@@ -159,18 +188,17 @@ int isFim(char line[]) {
 
 /* CELULA INICIO */
 typedef struct CelulaDupla {
-    Serie elemento;
+    Serie *elemento;
     struct CelulaDupla *prox, *ant;
 } CelulaDupla;
 
-CelulaDupla* new_celula_dupla(Serie *elemento) {
-    CelulaDupla *temp = (CelulaDupla*)malloc(sizeof(CelulaDupla));
+CelulaDupla* novaCelulaDupla(Serie series) {
+    CelulaDupla *nova = (CelulaDupla*) malloc(sizeof(CelulaDupla));
 
-    temp->elemento = *elemento;
-    temp->prox = NULL;
-    temp->ant = NULL;
+    nova->elemento = clonar(series);
+    nova->ant = nova->prox = NULL;
 
-    return temp;
+    return nova;
 }
 /* CELULA FIM */
 
@@ -180,92 +208,92 @@ typedef struct ListaDupla {
     int size;
 } ListaDupla;
 
-ListaDupla* new_lista_dupla(ListaDupla *temp) {
-    Serie series;
-    temp->primeiro = new_celula_dupla(&series);
-    temp->ultimo = temp->primeiro;
-    temp->size = 0;
-
+ListaDupla novaListaDupla() {
+    Serie series = novaStructSerie();
+    ListaDupla temp;
+    temp.primeiro = temp.ultimo = novaCelulaDupla(series);
+    temp.size = 0;
     return temp;
 }
 
-int tamanhoListaDupla(ListaDupla *temp) {
-    return temp->size;
-}
-
-void inserirFimDupla(ListaDupla *lista, Serie *elemento) {
-    Serie series;
-    series = clonar(elemento);
-    lista->ultimo->prox = new_celula_dupla(&series);
+void inserirFim(ListaDupla *lista, Serie series) {
+    lista->ultimo->prox = novaCelulaDupla(series);
     lista->ultimo->prox->ant = lista->ultimo;
     lista->ultimo = lista->ultimo->prox;
     lista->size++;
 }
 
-Serie* getJogadorPos(int pos) {
-    ListaDupla *temp = temp->primeiro->prox;
-    CelulaDupla *i = temp;
-    for(int j=0; j < pos ; j++,i = i->prox);
-    return i->elemento;
+int tamanho(ListaDupla *lista) {
+    return lista->size;
 }
 
-CelulaDupla* getCelulaPos(int pos){
-    ListaDupla *temp = temp->primeiro->prox;
-    CelulaDupla *i = temp;
-    for(int j=0; j < pos ; j++,i = i->prox);
+Serie* getSeriePos(ListaDupla *lista, int pos) {
+    CelulaDupla *temp = lista->primeiro->prox;
+    for (int i = 0; (i < pos && temp->prox != NULL); temp = temp->prox, i++);
+    return temp->elemento; 
+}
+
+CelulaDupla* getCelulaPos(ListaDupla *lista, int pos){
+    CelulaDupla *i = lista->primeiro->prox;
+    for(int j = 0; j < pos ; j++, i = i->prox);
     return i;
 }
 
 void swap(CelulaDupla *i, CelulaDupla *j){
-    Serie tmp = i->elemento;
+    Serie *tmp = i->elemento;
     i->elemento = j->elemento;
     j->elemento = tmp;
 }   
 
-void quicksortRec(int esq, int dir, Serie* pivo) {
-    int i = esq, j = dir; 
+void quicksortRec(ListaDupla *lista, int esq, int dir) {
+    int i = esq, j = dir;
+    Serie *pivo = getSeriePos(lista, (esq + dir) / 2);
 
     while (i <= j) {
 
-        while (strcmp(getJogadorPos(i)->pais , pivo->pais) < 0 || (strcmp(getJogadorPos(i)->pais , pivo->pais) == 0 && strcmp(getJogadorPos(i)->nome , pivo->pais) < 0)){
+        while (strcmp(getSeriePos(lista, i)->pais , pivo->pais) < 0 || (strcmp(getSeriePos(lista, i)->pais , pivo->pais) == 0 && strcmp(getSeriePos(lista, i)->nome , pivo->pais) < 0)){
             ++i;
             comparacoes+=3;
         }
 
-        while (strcmp(getJogadorPos(j)->pais , pivo->pais) < 0 || (strcmp(getJogadorPos(j)->pais , pivo->pais) == 0 && strcmp(getJogadorPos(j)->nome , pivo->pais) < 0)){ 
+        while (strcmp(getSeriePos(lista, j)->pais , pivo->pais) < 0 || (strcmp(getSeriePos(lista, j)->pais , pivo->pais) == 0 && strcmp(getSeriePos(lista, j)->nome , pivo->pais) < 0)){ 
             --j;
             comparacoes+=3;
         }
 
         if (i <= j) {
-            swap(getCelulaPos(i),getCelulaPos(j));
+            swap(getCelulaPos(lista, i),getCelulaPos(lista, j));
             ++i;
             --j;
         }
     }
 
-    if (esq < j)quicksortRec( esq, j, getJogadorPos( (dir+esq)/2 ) );
-    if (i < dir)quicksortRec( i, dir, getJogadorPos( (dir+esq)/2 ) );
+    if (esq < j) {
+        quicksortRec(lista, esq, j);
+    }
+    if (i < dir) {
+        quicksortRec(lista, i, dir);
+    }
 }
 
-void quicksort() {
-    int n = tamanho();
-    quicksortRec( 0, n-1, getJogadorPos( 0+(n+1)/2 ) );
+void quicksort(ListaDupla *lista) {
+    int n = tamanho(lista);
+    quicksortRec(lista, 0, tamanho(lista) - 1);
 }
 
 void mostrar(ListaDupla *lista) {
     CelulaDupla *i;
 
     for (i = lista->primeiro->prox; i != NULL; i = i->prox) {
-        printf("%s %s %s %s %s %s %s %i %i\n", i->elemento.nome,
-                                               i->elemento.formato,
-                                               i->elemento.duracao,
-                                               i->elemento.pais,
-                                               i->elemento.idioma,
-                                               i->elemento.emissora,
-                                               i->elemento.transmissao,
-                                               i->elemento.num_temporadas,
-                                               i->elemento.num_episodios);
+        printf("%s %s %s %s %s %s %s %i %i\n", i->elemento->nome,
+                                               i->elemento->formato,
+                                               i->elemento->duracao,
+                                               i->elemento->pais,
+                                               i->elemento->idioma,
+                                               i->elemento->emissora,
+                                               i->elemento->transmissao,
+                                               i->elemento->num_temporadas,
+                                               i->elemento->num_episodios);
     }
 
 }
@@ -289,33 +317,29 @@ int main() {
     strcpy(line, PREFIXO);
     readline(line + tam_prefixo, MAX_LINE_SIZE);
     int numEntrada = 0;
-
-    ListaDupla *listadupla;
-    listadupla = (ListaDupla*)malloc(sizeof(ListaDupla));
-
-    listadupla = new_lista_dupla(listadupla);
+    ListaDupla lista = novaListaDupla();
 
     while (!isFim(line + tam_prefixo)) {
         char *html = ler_html(line);
         ler_serie(&serie, html);
-        inserirFimDupla(listadupla, &serie);
+        inserirFim(&lista, serie);
         free(html);
         readline(line + tam_prefixo, MAX_LINE_SIZE);
         numEntrada++;
     }
 
     inicio = clock();
-    quicksort(listadupla, 0, numEntrada - 1);
+    quicksort(&lista);
     fim = clock();
 
-    mostrar(listadupla);
+    mostrar(&lista);
 
     double tempo =  ((fim - inicio) / (double)CLOCKS_PER_SEC) / 1000.0;
 
     FILE *arq;
     arq = fopen("matricula_quicksort2.txt","w");
 
-    fprintf(arq, "Matricula : 655537 \t Tempo de execução : %fs\t Numero de Comparações : %i ", tempo, comparacoes);
+    fprintf(arq, "Matricula : 742238 \t Tempo de execução : %fs\t Numero de Comparações : %i ", tempo, comparacoes);
     fclose(arq); 
     
     return EXIT_SUCCESS;

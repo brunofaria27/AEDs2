@@ -1,6 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <locale.h>
 #include <time.h>
 
 #define MAX_FIELD_SIZE 100
@@ -67,6 +69,27 @@ long tam_arquivo(FILE *file) {
     return size;
 }
 
+char *trim(char *str) {
+    char *end;
+
+    while (isspace((unsigned char)*str)) {
+        str++;
+    }
+
+    if (*str == 0) {
+        return str;
+    }
+    
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end)) {
+        end--;
+    }
+
+    end[1] = '\0';
+
+    return str;
+}
+
 // Retorna todo o conteúdo do arquivo numa string.
 char *ler_html(char filename[]) {
     FILE *file = fopen(filename, "r");
@@ -109,7 +132,7 @@ char *extrair_texto(char *html, char *texto) {
     }
     *texto = '\0';
 
-    return *start == ' ' ? start + 1 : start;
+    return *trim(start) == ' ' ? trim(start + 1) : trim(start);
 }
 
 void ler_serie(Serie *serie, char *html) {
@@ -180,7 +203,13 @@ void inserirFim(Serie serie) {
     tam++;
 }
 
-void selectionRecursive(int n, int i) {
+void swap(int i, int j) {
+    Serie temp = series[i];
+    series[i] = series[j];
+    series[j] = temp;
+}
+ 
+void selectionSort(int n, int i) {
     if (i >= n - 1) {
         return;
     }
@@ -194,12 +223,9 @@ void selectionRecursive(int n, int i) {
         }
     }
 
-    Serie temp[1];
-    temp[0] = series[i];
-    series[i] = series[menor];
-    series[menor] = temp[0];
+    swap(i, menor);
 
-    selectionRecursive(n, i + 1);
+    selectionSort(n, i + 1);
 }
 
 int main() {
@@ -222,7 +248,7 @@ int main() {
     }
 
     inicio = clock();
-    selectionRecursive(numEntrada, 0);
+    selectionSort(numEntrada, 0);
     fim = clock();
 
     for(int i = 0; i < numEntrada; i++) {
