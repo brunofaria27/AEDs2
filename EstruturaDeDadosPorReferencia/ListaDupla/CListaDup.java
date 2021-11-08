@@ -192,6 +192,10 @@ class CListaDup {
 		return null;
 	}
 
+	public Object retornaItem() {
+		return primeira.prox.item;
+	}
+
 	// Metodo que retorna a quantidade de elementos da lista.
 	public int quantidade() {
 		return qtde;
