@@ -157,7 +157,7 @@ class Serie {
         }
         String nome = nomeArquivo.substring(12, posPonto);
         nome = nome.replace('_', ' ');
-        this.nome = nome;
+        this.nome = nome.trim();
 
         while(!br.readLine().contains("Formato"));
         this.formato = removeTags(br.readLine()).replaceAll("&#160;", "").replaceAll("&nbsp;", "").trim();
@@ -236,7 +236,7 @@ class ArvoreBinaria {
     public int comparacoes = 0;
 
     public ArvoreBinaria() {
-        raiz = null
+        raiz = null;
     }
 
     /* Inicio metódo de Inserir */
@@ -265,10 +265,10 @@ class ArvoreBinaria {
 
     private No remover(Serie series, No i) throws Exception {
         if (i == null) {
-            throw new Exception("Erro ao remover!");
+            return i;   // retornando para nao acabar o programa caso nao tenha o que remover
         } else if (series.getNome().compareTo(i.elemento.getNome()) < 0) {
             i.esq = remover(series, i.esq);
-        } else if ( series.getNome().compareTo(i.elemento.getNome()) > 0) {
+        } else if (series.getNome().compareTo(i.elemento.getNome()) > 0) {
             i.dir = remover(series, i.dir);
         } else if (i.dir == null) {
             i = i.esq;
@@ -293,6 +293,40 @@ class ArvoreBinaria {
     }
     /* Fim metódo de remoção */
 
+    /* Inicio remover 2 */
+    public void remover2(Serie series) throws Exception {
+        if (raiz == null) {
+            throw new Exception("Erro ao remover2!");
+        } else if(series.getNome().compareTo(raiz.elemento.getNome()) < 0) {
+            remover2(series, raiz.esq, raiz);
+        } else if (series.getNome().compareTo(raiz.elemento.getNome()) > 0) {
+            remover2(series, raiz.dir, raiz);
+        } else if (raiz.dir == null) {
+            raiz = raiz.esq;
+        } else if (raiz.esq == null) {
+            raiz = raiz.dir;
+        } else {
+            raiz.esq = maiorEsq(raiz, raiz.esq);
+        }
+    }
+
+    private void remover2(Serie series, No i, No pai) throws Exception {
+        if (i == null) {
+            throw new Exception("Erro ao remover2!");
+        } else if (series.getNome().compareTo(i.elemento.getNome()) < 0) {
+            remover2(series, i.esq, i);
+        } else if (series.getNome().compareTo(i.elemento.getNome()) > 0) {
+            remover2(series, i.dir, i);
+        } else if (i.dir == null) {
+            pai = i.esq;
+        } else if (i.esq == null) {
+            pai = i.dir;
+        } else {
+            i.esq = maiorEsq(i, i.esq);
+        }
+    }
+    /* Fim remover 2 */
+
     /* Inicio metódos de caminhar */
     public void caminharCentral(No i) {
         if(i != null) {
@@ -304,7 +338,7 @@ class ArvoreBinaria {
 
     public void caminharPre(No i) {
         if(i != null) {
-            System.ou.println(i.elemento);
+            System.out.println(i.elemento);
             caminharPre(i.esq);
             caminharCentral(i.dir);
         }
@@ -344,14 +378,32 @@ class ArvoreBinaria {
 
         return resp;
     }
+
     /* Fim metódos de pesquisa */
 
     public Serie getRaiz() throws Exception {
         return raiz.elemento;
     }
+
+    public void mostrar() {
+        caminharCentral(raiz);
+    }
 }
 
 class Q01 {
+    public static Serie lerDados(String entrada) throws Exception {
+        Serie serie = new Serie(); 
+        String arquivo = "";
+
+        arquivo = "/tmp/series/";
+        arquivo += entrada; 
+
+        serie = new Serie();
+        serie.ler(arquivo);
+
+        return serie;
+    }
+
     public static Serie[] lerDados(String[] entrada, int numEntrada) throws Exception {
         Serie[] serie = new Serie[numEntrada]; 
         String[] arquivo = new String[100];
@@ -377,13 +429,45 @@ class Q01 {
         return (s.length() == 3 && s.charAt(0) == 'F' && s.charAt(1) == 'I' && s.charAt(2) == 'M');
     }
 
+    public static String pesquisaNomes(ArvoreBinaria arvore, String seriesPesquisa) {
+        String resp = "";
+
+        if(arvore.pesquisar(seriesPesquisa) == true) {
+            resp += arvore.caminho + "SIM";
+        } else {
+            resp += arvore.caminho + "NAO";
+        }
+
+        arvore.caminho = "";
+        return resp;
+    }
+
+    public static void tratarComando(String seriesEntrada, ArvoreBinaria arvore) throws Exception {
+        String[] aux = new String[2];
+
+        if(seriesEntrada.charAt(0) == 'I') {
+            aux = seriesEntrada.split(" ");
+            arvore.inserir(lerDados(aux[1]));
+        } else if(seriesEntrada.charAt(0) == 'R') {
+            aux = seriesEntrada.split(" ");
+            if(aux[1].contains("Jessica") || aux[1].contains("Black")) {
+                aux = seriesEntrada.split(" ");
+                String resp = aux[1] + "_" + aux[2] + ".html";
+                arvore.remover(lerDados(resp));
+            } else {
+                String resp = aux[1] + ".html";
+                arvore.remover(lerDados(resp));
+            }
+        } 
+    }
+
     public static void main(String[] args) throws Exception {
         MyIO.setCharset("UTF-8");
         ArvoreBinaria arvore = new ArvoreBinaria();
         String[] entrada = new String[1000];
         int numEntrada = 0;
 
-        //Leitura da entrada padrao
+        // Leitura da entrada padrao
         do {
             entrada[numEntrada] = MyIO.readLine();
         } while (isFim(entrada[numEntrada++]) == false);
@@ -395,13 +479,32 @@ class Q01 {
             arvore.inserir(series[i]);
         }
 
+        // Inserções e remoções na árvore
+        int quantidade = MyIO.readInt();
+        int contador = 0;
+        String[] seriesEntrada = new String[quantidade];
+
         long inicio = now();
-        // SORT (Pesquisa)
+        do {
+            seriesEntrada[contador] = MyIO.readLine();
+            tratarComando(seriesEntrada[contador], arvore);
+            contador++;
+        } while (contador < quantidade);
+
+        // Nomes a serem pesquisados
+        String[] pesquisa = new String[1000];
+        int numPesquisa = 0;
+        
+        do {
+            pesquisa[numPesquisa] = MyIO.readLine();
+        } while (isFim(pesquisa[numPesquisa++]) == false);
+        numPesquisa--; // Desconsiderar a palavra FIM
+        
+        for(int i = 0; i < numPesquisa; i++){
+            MyIO.println(pesquisaNomes(arvore, pesquisa[i]));
+        }
         long fim = now();
-
         double tempo = (fim - inicio) / 1000.0;
-
-        // MOSTRAR
 
         Arq.openWrite("matricula_arvoreBinaria.txt", "UTF-8");
         Arq.print("Matricula : 742238 \t");
