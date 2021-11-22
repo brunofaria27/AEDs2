@@ -470,6 +470,19 @@ class Q04 {
         return new Date().getTime();
     }  
 
+    public static String pesquisaNomes(Alvinegra arvore, String seriesPesquisa) {
+        String resp = "";
+
+        if(arvore.pesquisar(seriesPesquisa) == true) {
+            resp += arvore.caminho + "SIM";
+        } else {
+            resp += arvore.caminho + "NAO";
+        }
+
+        arvore.caminho = "";
+        return resp;
+    }
+
     public static boolean isFim(String s) {
         return (s.length() == 3 && s.charAt(0) == 'F' && s.charAt(1) == 'I' && s.charAt(2) == 'M');
     }
@@ -493,7 +506,18 @@ class Q04 {
             arvore.inserir(series[i]);
         }
 
-        arvore.mostrar();
+        // Nomes a serem pesquisados
+        String[] pesquisa = new String[1000];
+        int numPesquisa = 0;
+        
+        do {
+            pesquisa[numPesquisa] = MyIO.readLine();
+        } while (isFim(pesquisa[numPesquisa++]) == false);
+        numPesquisa--; // Desconsiderar a palavra FIM
+        
+        for(int i = 0; i < numPesquisa; i++){
+            MyIO.println(pesquisaNomes(arvore, pesquisa[i]));
+        }
         long fim = now();
         double tempo = (fim - inicio) / 1000.0;
 

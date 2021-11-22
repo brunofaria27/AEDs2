@@ -399,12 +399,12 @@ class ArvoreArvore {
                 comparacoes++;
                 resp = true;
             } else {
-                caminho += "esq ";
+                caminho += "ESQ ";
                 comparacoes++;
                 resp = pesquisarSegundaArvore(no.esq, x);
 
                 if(resp == false){
-                    caminho += "dir ";
+                    caminho += "DIR ";
                     comparacoes++;
                     resp = pesquisarSegundaArvore(no.dir, x);
                 }
@@ -467,15 +467,6 @@ class Q02 {
         return resp;
     }
 
-    public static void tratarComando(String seriesEntrada, ArvoreArvore arvore) throws Exception {
-        String[] aux = new String[2];
-
-        if(seriesEntrada.charAt(0) == 'I') {
-            aux = seriesEntrada.split(" ");
-            arvore.inserir2(lerDados(aux[1]));
-        } 
-    }
-
     public static void main(String[] args) throws Exception {
         MyIO.setCharset("UTF-8");
         ArvoreArvore arvore = new ArvoreArvore();
@@ -490,22 +481,11 @@ class Q02 {
 
         Serie[] series = lerDados(entrada, numEntrada);
 
+        long inicio = now();
         // Inserindo nomes na arvore 2
         for(int i = 0; i < numEntrada; i++){
             arvore.inserir2(series[i]);
         }
-
-        // Inserções e remoções na árvore
-        int quantidade = MyIO.readInt();
-        int contador = 0;
-        String[] seriesEntrada = new String[quantidade];
-
-        long inicio = now();
-        do {
-            seriesEntrada[contador] = MyIO.readLine();
-            tratarComando(seriesEntrada[contador], arvore);
-            contador++;
-        } while (contador < quantidade);
 
         // Nomes a serem pesquisados
         String[] pesquisa = new String[1000];

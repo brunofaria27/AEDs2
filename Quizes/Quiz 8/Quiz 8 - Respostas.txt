@@ -1,0 +1,40 @@
+Quando você tem uma árvore balanceada, você tem mais eficiência nos funções de pesquisa, inserção e remoção?
+Verdadeiro
+Quando a árvore está balanceada, os números de comparação são muito menores do que a árvore desbalanceada, por conta de quando ela está balanceada f(n) = log2(n) e quando está desbalanceada f(n) = n
+
+Você tem uma árvore onde todos os nós tem a diferença de altura de suas árvores da esquerda e da direita são 0, -1 ou +1, com isso, você pode utilizar o método de balanceamento AVL para deixar a árvore balanceada?
+Falso
+Quando a diferença de altura de suas árvores da esquerda e da direita são 0, +1 ou -1, a árvore já está balanceada, com isso não será necessário utilizar nenhum metódo de balanceamento.
+
+Árvores desbalanceadas para a direita devem ser rotacionadas para a esquerda e as para esquerda, devem ser rotacionadas para a direita.
+Verdadeiro
+Quando a árvore da direita estiver desbalanceada, você deve fazer uma RSE e quando ela estiver desbalanceada para a esquerda você deve fazer uma RSD.
+
+A diferença entre as alturas de suas subárvores permanece constante em todo o caso, após inserções ou remoções de chaves.
+Falso
+Ao ter uma inserção ou remoção a altura de suas subárvore pode mudar, por isso a afirmativa está incorreta.
+
+Uma árvore tem um nó desbalanceado com o valor +2, o seu nó a esquerda tem o valor -1, então para resolver o problema de desbalanceamento dessa árvore deve-se aplicar uma RDE.
+Falso
+Quando um nó com o valor desbalanceado com o valor negativo estiver presente e o nó raiz de sua subárvore esquerda tiver FB negativo, deve-se aplicar uma RDD.
+
+Se qualquer nó apresentar fator de balanceamento diferente dos permitidos, a árvore está desbalanceada e deve sofrer uma operação de rotação.
+Verdadeiro
+Deve-se aplicar uma operação de rotação ou RSE, RDE, RSD, RDD, dependendo dos fatores de balanceamentos do nó desbalanceado e das suas subárvores, para que faça com que a árvore volte a ficar balanceada.
+
+Uma árvore desbalanceado com 3 de altura, ao aplicar a operação de RDE, a altura da árvore será modificada para 2.
+Verdadeiro
+A altura da árvore diminui para 2, por conta do processo que faz rotações e substituição de locais na árvore.
+
+Uma árvore quando sofre uma operação de rotação e o nó rotacionado substituir um filho de outro nó esse filho acaba por consequência virar filho do nó rotacionado.
+Verdadeiro
+Uma regra clara na hora de aplicar as operações de rotação é que quando o nó toma lugar do outro, o outro virá filho dele.
+
+O uso de árvores binárias visa tornar mais eficiente, porém a sua eficiencia está diretamente não está ligado diretamente com o seu balanceamento.
+Falso
+Quando você tem uma árvore balanceada o número de comparações para pesquisa, remoção e inserção é muito menor. E quando está desbalanceada é muito maior, com isso, pode-se observar que as árvores binárias dependem do balanceamento para ser mais eficiente. 
+
+
+A diferença entre árvore binária simples e árvores AVL é o fato de que a segunda pode se reconfigurar dinamicamente, com o intuito de manter um bom nível de balanceamento.
+Verdadeiro
+A árvore AVL é feita exclusivamente para quando ocorrer as inserções, ser possivel utilizar os metódos de rotação para que a árvore fique balanceada e com isso mais eficiente.
