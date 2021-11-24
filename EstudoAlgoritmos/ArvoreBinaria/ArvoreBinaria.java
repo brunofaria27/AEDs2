@@ -6,23 +6,10 @@ class ArvoreBinaria {
     }
 
     /* INICIO METODO DE PESQUISA */
-    /**
-    * Metodo publico iterativo para pesquisar elemento.
-    * @param x Elemento que sera procurado.
-    * @return <code>true</code> se o elemento existir,
-    * <code>false</code> em caso contrario.
-    */
     public boolean pesquisar(int x) {
         return pesquisar(x, raiz);
     }
 
-    /**
-    * Metodo privado recursivo para pesquisar elemento.
-    * @param x Elemento que sera procurado.
-    * @param i No em analise.
-    * @return <code>true</code> se o elemento existir,
-    * <code>false</code> em caso contrario.
-    */
 	private boolean pesquisar(int x, No i) {
         boolean resp;
 
@@ -117,22 +104,10 @@ class ArvoreBinaria {
     /* FIM METÓDO DE INSERÇÃO COM PAI */
 
     /* INICIO METÓDO DE REMOÇÃO SEM PAI */
-    /**
-    * Metodo publico iterativo para remover elemento.
-    * @param x Elemento a ser removido.
-    * @throws Exception Se nao encontrar elemento.
-    */
     public void remover(int x) throws Exception {
         raiz = remover(x, raiz);
     }
 
-    /** 
-    * Metodo privado recursivo para remover elemento.
-    * @param x Elemento a ser removido.
-    * @param i No em analise.
-    * @return No em analise, alterado ou nao.
-    * @throws Exception Se nao encontrar elemento.
-    */
     private No remover(int x, No i) throws Exception {
         if (i == null) {
             throw new Exception("Erro ao remover!");
@@ -154,12 +129,6 @@ class ArvoreBinaria {
         return i;
     }
 
-	/**
-	* Metodo para trocar o elemento "removido" pelo maior da esquerda, usado tanto no sem pai, como no com pai.
-	* @param i No que teve o elemento removido.
-	* @param j No da subarvore esquerda.
-	* @return No em analise, alterado ou nao.
-	*/
 	private No maiorEsq(No i, No j) {
         // Encontrou o maximo da subarvore esquerda.
         if (j.dir == null) {
@@ -192,13 +161,6 @@ class ArvoreBinaria {
       }
    }
 
-	/**
-	 * Metodo privado recursivo para remover elemento.
-	 * @param x Elemento a ser removido.
-	 * @param i No em analise.
-	 * @param pai do No em analise.
-	 * @throws Exception Se nao encontrar elemento.
-	 */
 	private void remover2(int x, No i, No pai) throws Exception {
 	    if (i == null) {
             throw new Exception("Erro ao remover2!");
@@ -216,28 +178,164 @@ class ArvoreBinaria {
     }
     /* FIM METÓDO DE REMOÇÃO SEM PAI */
 
-    /* INICIO METÓDOS DE PEGAR MAIOR E MENOR ELEMENTOS */
-    /**
-    * Metodo que retorna o maior elemento da árvore
-    * @return int maior elemento da árvore
+    /* INICIO METÓDO DE PEGAR A RAIZ */
+    public int getRaiz() throws Exception {
+        return raiz.elemento;
+    }
+    /* FIM METÓDO DE PEGAR A RAIZ */
+
+    /*
+    * EXERCÍCIOS DE ESTUDO PARA A PROVA 2 METÓDOS PARA UMA ÁRVORE BINÁRIA DE PESQUISA
     */
-    public int getMaior() {
-        int resp = -1;
 
-        // Para pegar o maior basta ir para o elemento mais a direita
-        if(raiz != null) {
-            No i;
-            for(i = raiz; i.dir != null; i = i.dir);
-            resp = i.elemento;
-        }
-
-        return resp;
+    /* INICIO METÓDO PEGAR ALTURA DE UM NÓ */
+    public int getAlturaNo(int num) {
+        return getAlturaNo(raiz, num);
     }
 
-    /**
-   * Metodo que retorna o menor elemento da árvore
-   * @return int menor elemento da árvore
-   */
+    private int getAlturaNo(No i, int num){
+    
+        if(i == null) {
+            return -1;
+        } else {
+            if(pesquisar(num) == false) {
+                return -1;
+            } else {
+                No armazena = pesquisarNo(num, i);
+                return getAltura(armazena, 0);
+            }
+        }
+    }
+
+    private No pesquisarNo(int x, No i) {
+        No pesquisado = raiz;
+
+        if(i != null) {
+            if (x == i.elemento) {
+                pesquisado = i;
+            } else if (x < i.elemento) {
+                pesquisado = pesquisarNo(x, i.esq);
+            } else {
+                pesquisado = pesquisarNo(x, i.dir);
+            }
+        }
+
+      return pesquisado;
+	}
+    /* FIM METÓDO PEGAR ALTURA DE UM NÓ */
+
+    /* INICIO METÓDO PEGAR PROFUNDIDADE DE UM NÓ */
+    public int getProfundidade(int num) {
+        return getProfundidade(raiz, num, 0);
+    }
+
+    private int getProfundidade(No i, int num, int nível) {
+        int result;
+
+        if(i != null) {
+            if(i.elemento == num) {
+                return nível;
+            } else {
+                result = getProfundidade(i.esq, num, nível + 1);
+
+                if(result >= 0) {
+                    return result;
+                } else {
+                    return getProfundidade(i.dir, num, nível + 1);
+                }
+            }
+        } else {
+            return -1;
+        }
+    }
+    /* FIM METÓDO PEGAR PROFUNDIDADE DE UM NÓ */
+
+    /* INICIO METÓDO QUE RETORNA A ALTURA DE UMA ABP */
+    public int getAltura() {
+        return getAltura(raiz, 0);
+    }
+
+    public int getAltura(No i, int altura){
+        if(i == null){
+            altura--;
+        } else {
+            int alturaEsq = getAltura(i.esq, altura + 1);
+            int alturaDir = getAltura(i.dir, altura + 1);
+
+            if(alturaEsq > alturaDir) {
+                altura = alturaEsq;
+            } else {
+                altura = alturaDir;
+            }
+        }
+
+        return altura;
+    }
+    /* FIM METÓDO QUE RETORNA A ALTURA DE UMA ABP */
+
+    /* INICIO METÓDO QUE RETORNA A QUANTIDADE DE NÓS FOLHAS EM UMA ÁRVORE */
+    public int contarFolhas() {
+        return contarFolhas(raiz);
+    }
+
+    private int contarFolhas(No i) {
+        if(i == null) { 
+            return 0;
+        } else if(i.esq == null && i.dir == null) {
+            return 1;
+        }
+        return contarFolhas(i.esq) + contarFolhas(i.dir);
+    }
+    /* FIM METÓDO QUE RETORNA A QUANTIDADE DE NÓS FOLHAS EM UMA ÁRVORE */
+
+    /* INICIO METÓDO VALORES DOS NÓS EM ORDEM DECRESCENTE */
+    private void caminharDecrescente(No i) {
+        if(i != null) {
+            caminharPre(i.dir); // Elementos da direita.
+            System.out.print(i.elemento + " "); // Conteudo do no.
+            caminharPre(i.esq); // Elementos da esquerda.
+        }
+	}
+
+    public void mostraDecrescente() {
+        caminharDecrescente(raiz);
+    }
+    /* FIM METÓDO VALORES DOS NÓS EM ORDEM DECRESCENTE */
+
+    /* INICIO METÓDO QUE IMPRIME PARA CADA NÓ PROFUNDIDADE, VALORES DOS FILHOS EM CAMINHAMENTO PRE-ORDEM */
+    public void getNoInfo() {
+        caminharPre2(raiz);
+    }
+
+    private void caminharPre2(No i) {
+        if(i != null) {
+            getNoInfo(i);
+            caminharPre2(i.esq); // Elementos da esquerda.
+            caminharPre2(i.dir); // Elementos da direita.
+        }
+	}
+
+    public void getNoInfo(No i) {
+        if(i != null) {
+            System.out.println("Elemento = " + i.elemento);
+            System.out.println("Profundidade = " + getProfundidade(i.elemento));
+
+            if(i.esq != null) {
+                System.out.println("Esquerda = " + i.esq.elemento);
+            } else {
+                System.out.println("Esquerda = null");
+            }
+
+            if(i.dir != null) {
+                System.out.println("Direita = " + i.dir.elemento + "\n");
+            } else {
+                System.out.println("Direita = null\n");
+            }
+        }
+    }
+    /* FIM METÓDO QUE IMPRIME PARA CADA NÓ PROFUNDIDADE, VALORES DOS FILHOS EM CAMINHAMENTO PRE-ORDEM */
+
+    /* INICIO METÓDO QUE RETORNA MENOR ELEMENTO DA ÁRVORE */
     public int getMenor() {
         int resp = -1;
 
@@ -250,37 +348,106 @@ class ArvoreBinaria {
 
         return resp;
     }
-    /* FIM METÓDOS DE PEGAR MAIOR E MENOR ELEMENTOS */
+    /* FIM METÓDO QUE RETORNA MENOR ELEMENTO DA ÁRVORE */
 
-    /* INICIO METÓDO DE PEGAR ALTURA DA ÁRVORE */
-    /**
-   * Metodo que retorna a altura da árvore
-   * @return int altura da árvore
-   */
-    public int getAltura() {
-        return getAltura(raiz, 0);
-    }
+    /* INICIO METÓDO QUE RETORNA SEGUNDO MENOR ELEMENTO DA ÁRVORE */
+    public int getSegundoMenor() {
+        int resp = -1;
 
-    /**
-   * Metodo que retorna a altura da árvore
-   * @return int altura da árvore
-   */
-    public int getAltura(No i, int altura){
-        if(i == null){
-            altura--;
-        } else {
-            int alturaEsq = getAltura(i.esq, altura + 1);
-            int alturaDir = getAltura(i.dir, altura + 1);
-            altura = (alturaEsq > alturaDir) ? alturaEsq : alturaDir;
+        if(raiz != null) {
+            No pai = raiz;
+            No i;
+
+            for(i = raiz; i.esq != null; i = i.esq) {
+                if(i.esq.elemento > getMenor()) {
+                    pai = i.esq;
+                }
+            }
+
+            resp = pai.elemento;
         }
 
-        return altura;
+        return resp;
     }
-    /* FIM METÓDO DE PEGAR ALTURA DA ÁRVORE */
+    /* FIM METÓDO QUE RETORNA SEGUNDO MENOR ELEMENTO DA ÁRVORE */
 
-    /* INICIO METÓDO DE PEGAR A RAIZ */
-    public int getRaiz() throws Exception {
-        return raiz.elemento;
+    /* INICIO METÓDO QUE RETORNA MAIOR ELEMENTO DA ÁRVORE */
+    public int getMaior() {
+        int resp = -1;
+
+        // Para pegar o maior basta ir para o elemento mais a direita
+        if(raiz != null) {
+            No i;
+            for(i = raiz; i.dir != null; i = i.dir);
+            resp = i.elemento;
+        }
+
+        return resp;
     }
-    /*FIM METÓDO DE PEGAR A RAIZ */
+    /* FIM METÓDO QUE RETORNA MAIOR ELEMENTO DA ÁRVORE */
+
+    /* INICIO METÓDO QUE SOMA OS NÓS DE UMA ÁRVORE */
+    public int soma() {
+        return soma(raiz);
+    }
+  
+    private int soma(No i) {
+        int resp = 0;
+
+        if(i != null){
+            resp = i.elemento + soma(i.esq) + soma(i.dir);
+        }
+
+        return resp;
+    }
+    /* FIM METÓDO QUE SOMA OS NÓS DE UMA ÁRVORE */
+
+    /* INICIO METÓDO QUE IMPRIMA OS NÓS-FOLHA DA ESQUERDA PARA A DIREITA */
+    public void imprimeFolhasEsqDir() {
+        imprimeFolhasEsqDir(raiz);
+    }
+
+    private void imprimeFolhasEsqDir(No i) {
+        if(i != null) { 
+            if(i.esq == null && i.dir == null) {
+                System.out.println(i.elemento);
+            } else {
+                imprimeFolhasEsqDir(i.esq);
+                imprimeFolhasEsqDir(i.dir);
+            }
+        }
+    }
+    /* FIM METÓDO QUE IMPRIMA OS NÓS-FOLHA DA ESQUERDA PARA A DIREITA */
+
+    /* INICIO METÓDO QUE IMPRIMA OS NÓS-FOLHA DA DIREITA PARA A ESQUERDA */
+    public void imprimeFolhasDirEsq() {
+        imprimeFolhasDirEsq(raiz);
+    }
+
+    private void imprimeFolhasDirEsq(No i) {
+        if(i != null) { 
+            if(i.esq == null && i.dir == null) {
+                System.out.println(i.elemento);
+            } else {
+                imprimeFolhasDirEsq(i.dir);
+                imprimeFolhasDirEsq(i.esq);
+            }
+        }
+    }
+    /* FIM METÓDO QUE IMPRIMA OS NÓS-FOLHA DA DIREITA PARA A ESQUERDA */
+
+    /* INICIO METÓDO QUE RETORNA A QUANTIDADE DE NÓS NA ÁRVORE */
+    public int contarNos() {
+        return contarNos(raiz);
+    }
+
+    private int contarNos(No i){
+        if(i == null) {
+            return 0;
+        } else {
+            return 1 + contarNos(i.esq) + contarNos(i.dir);
+        }
+     }
+    /* FIM METÓDO QUE RETORNA A QUANTIDADE DE NÓS NA ÁRVORE */
+
 }
