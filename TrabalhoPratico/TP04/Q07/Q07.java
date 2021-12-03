@@ -240,8 +240,8 @@ class Hash {
         return nomeConverted % m;
     }
 
-    public int reh(int nome){
-        return (nome + 1) % m;
+    public int reh(String nome){
+        return h(nome) % m;
     }
 
     public boolean inserir (Serie serie){
@@ -255,7 +255,7 @@ class Hash {
                 tabela[pos] = serie;
                 resp = true;
             } else {
-                pos = reh();
+                pos = reh(serie.getNome());
                 
                 if(tabela[pos] == NULO){
                     tabela[pos] = serie;
@@ -290,7 +290,7 @@ class Hash {
                 resp = tabela[pos];
                 tabela[pos] = NULO;
             } else {
-                pos = reh();
+                pos = reh(series.getNome());
 
                 if(tabela[pos] != NULO){
                     resp = tabela[pos];
