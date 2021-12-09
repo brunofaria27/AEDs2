@@ -450,4 +450,12 @@ class ArvoreBinaria {
      }
     /* FIM METÓDO QUE RETORNA A QUANTIDADE DE NÓS NA ÁRVORE */
 
+    public int misterio() {
+        return misterio(raiz);
+    }
+
+    private int misterio(No i) {
+        return (i != null)? misterio(i.esq) + misterio(i.dir) + 1 : 0;
+    }
+
 }
